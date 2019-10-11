@@ -22,20 +22,21 @@
                 <div class="login-logo"></div>
                 <div class="login-body">
                     <div class="login-title"><strong>欢迎登陆宿舍管理系统</strong></div>
-                    <form action="index.html" class="form-horizontal" method="post">
+                    <form action="{{ route('login') }}" class="form-horizontal" method="post">
+                        {{ csrf_field() }}
                     <div class="form-group">
                         <div class="col-md-12">
-                            <input type="text" class="form-control" placeholder="请输入账号"/>
+                            <input type="text" name="account" class="form-control" placeholder="请输入账号" />
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-12">
-                            <input type="password" class="form-control" placeholder="请输入密码"/>
+                            <input type="password" name="password" class="form-control" placeholder="请输入密码"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-8">
-                            <input type="text" class="form-control" placeholder="验证码"/>
+                            <input type="text" name="verification" class="form-control" placeholder="验证码"/>
                         </div>
                         <div class="col-md-4">
                             <img src="#">
@@ -43,7 +44,12 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <a href="#" class="btn btn-link btn-block">忘记密码？点这</a>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="remember" value="1">
+                                    <font color="#fff">记住我</font>
+                                </label>
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <button class="btn btn-info btn-block">登陆</button>
@@ -56,11 +62,32 @@
                         &copy; 2019 叶斌龙
                     </div>
                     <div class="pull-right">
-                        <a href="#">还没有账号？点这</a>
+                        <a href="#">忘记密码？点这</a>
                     </div>
                 </div>
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @foreach (['danger', 'warning', 'success', 'info'] as $msg)
+                    @if(session()->has($msg))
+                        <div class="flash-message">
+                            <div class="alert alert-{{ $msg }}">
+                                <ul >
+                                    <li>{{ session()->get($msg) }}</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    @endif
+                @endforeach
             </div>
-            
+
         </div>
         
     </body>
