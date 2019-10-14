@@ -11,13 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//首页
+Route::get('/','Home\IndexController@index')->name('/');
 
 //登陆
 Route::get('/login','Home\SessionController@index')->name('login');
 Route::post('/login','Home\SessionController@store')->name('login');
 
-//注册
-
+//学生录入_单人录入
+Route::get('/single_entry','Home\StudentController@single_entry')->name('single_entry');
+Route::post('/single_entry','Home\StudentController@stroe')->name('single_entry');
