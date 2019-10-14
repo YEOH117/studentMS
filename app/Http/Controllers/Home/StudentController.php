@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Profession_code;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
+use Importer;
 
 class StudentController extends Controller
 {
@@ -21,7 +22,7 @@ class StudentController extends Controller
         //表单验证
         $this->validate($request,[
             'name' => 'required',
-            'the_student_id' => 'digits_between:10,10|required',
+            'the_student_id' => 'digits_between:10,10|required|unique:students',
             'sex' => 'required',
         ]);
         //授权判断
@@ -78,6 +79,107 @@ class StudentController extends Controller
         }
         //插入成功,提示成功
         session()->flash('success','录入学生成功！');
+        return redirect()->back();
+    }
+
+    //学生-批量录入-页面
+    public function batch_entry(){
+        return view('admin.student.batch_entry');
+    }
+
+    //学生-批量录入-逻辑
+    public function batch_stroe(Request $request){
+        $this->validate($request,[
+            'upfile' => 'required',
+        ]);
+        //定义上传格式
+        $extension = array('xlsx','csv');
+        if($request->hasFile('upfile')) {
+            $file = $request->file('upfile');
+            $ext = $file->getClientOriginalExtension();
+            if (in_array($ext, $extension)) {
+            } else {
+                //不符合，报错
+                session()->flash('danger', '上传的文件格式错误！请上传文件格式为.xlsx的Excel文件，其他格式文件暂不支持！');
+                return redirect()->back();
+            }
+        }
+        //重新命名文件
+        $name = date('Y-m-d-h-i-s').rand(0,9).'.'.$ext;
+        //保存文件，并获取其路径
+        $path = $file->storeAs('public/entry_file', $name);
+        $path = str_replace('public','./storage',$path);
+        //获取Excel文件内容
+        $excel = Importer::make('Excel');
+        $excel->load($path);
+        $collection = $excel->getCollection();
+
+        //找到学号、姓名、性别在哪列
+        foreach($collection[0] as $key => $info){
+            if($info == "学号"){
+                $student_id_num = $key;
+            }
+            if($info == "姓名"){
+                $name_num = $key;
+            }
+            if($info == "性别"){
+                $sex_num = $key;
+            }
+        }
+        //遍历获取需要的数据
+        foreach($collection as $key => $value){
+            if($key == 0){
+                continue;
+            }
+            $student[$key-1]['the_student_id']= $value[$student_id_num];
+            $student[$key-1]['name']= $value[$name_num];
+            $student[$key-1]['sex']= $value[$sex_num];
+        }
+        //获取专业代码数据
+        $colleges = Profession_code::all();
+        //查询所有的student表中的学号
+        $student_id = Student::get()->pluck('the_student_id');
+        //删除所有重复元素
+        foreach ($student_id as $num){
+            foreach($student as $value){
+                if($value['the_student_id'] == $num){
+                    array_splice($student,1,1);
+                }
+            }
+        }
+
+        //创建学生记录
+
+        foreach($student as $value){
+
+            //遍历专业代码，找出学生对应专业与学院
+            $code = substr($value['the_student_id'],2,5);
+            $class = substr($value['the_student_id'],7,1);
+            foreach($colleges as $info){
+                if($code == $info['code']){
+                    $profession = $info['profession'];
+                    $college = $info['college'];
+                    break;
+                }
+            }
+            //创建学生记录
+            Student::create([
+                'the_student_id' => $value['the_student_id'],
+                'name' => $value['name'],
+                'sex' => $value['sex'],
+                'profession' => $profession,
+                'college' => $college,
+                'class' => $class,
+                'is_arrage' => 0,
+            ]);
+
+
+
+        }
+
+
+        //返回，提示成功
+        session()->flash('success', '批量导入成功！');
         return redirect()->back();
     }
 }

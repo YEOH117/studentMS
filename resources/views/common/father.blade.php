@@ -83,7 +83,7 @@
                 <a href="#"><span class="fa fa-tasks"></span> <span class="xn-text">学生录入</span></a>
                 <ul>
                     <li><a href="{{ route('single_entry') }}"><span class="fa fa-pencil"></span> 单个录入</a></li>
-                    <li><a href="#"><span class="fa fa-pencil-square-o"></span> 批量录入</a></li>
+                    <li><a href="{{ route('batch_entry') }}"><span class="fa fa-pencil-square-o"></span> 批量录入</a></li>
                 </ul>
             </li>
             <li class="xn-openable">
@@ -289,9 +289,7 @@
 
 
         <!-- START 脚本 -->
-        @section('script')
 
-        @show
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
@@ -301,8 +299,7 @@
         <!-- START THIS PAGE PLUGINS-->
 
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-
-
+        <script type="text/javascript" src="js/plugins/fileinput/fileinput.min.js"></script>
 
 
 
