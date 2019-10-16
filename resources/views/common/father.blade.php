@@ -11,7 +11,7 @@
     <!-- END META SECTION -->
 
     <!-- CSS INCLUDE -->
-    <link rel="stylesheet" type="text/css" id="theme" href="css/theme-default.css"/>
+    <link rel="stylesheet" type="text/css" id="theme" href="/css/theme-default.css"/>
     @section('css')
 
     @show
@@ -116,8 +116,8 @@
             <li class="xn-openable">
                 <a href="tables.html"><span class="fa fa-gears"></span> <span class="xn-text">管理员账号管理</span></a>
                 <ul>
-                    <li><a href="#"><span class="fa fa-align-justify"></span> 账号列表</a></li>
-                    <li><a href="#"><span class="fa fa-eraser"></span> 创建新账号</a></li>
+                    <li><a href="{{ route('admin_list') }}"><span class="fa fa-align-justify"></span> 账号列表</a></li>
+                    <li><a href="{{ route('admin_create') }}"><span class="fa fa-eraser"></span> 创建新账号</a></li>
                 </ul>
             </li>
             <li class="xn-openable">
@@ -291,15 +291,15 @@
         <!-- START 脚本 -->
 
         <!-- START PLUGINS -->
-        <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
-        <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>
+        <script type="text/javascript" src="/js/plugins/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/js/plugins/bootstrap/bootstrap.min.js"></script>
         <!-- END PLUGINS -->
 
         <!-- START THIS PAGE PLUGINS-->
 
-        <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-        <script type="text/javascript" src="js/plugins/fileinput/fileinput.min.js"></script>
+        <script type="text/javascript" src="/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+        <script type="text/javascript" src="/js/plugins/fileinput/fileinput.min.js"></script>
 
 
 
@@ -316,8 +316,8 @@
         <!-- START TEMPLATE -->
 
 
-        <script type="text/javascript" src="js/plugins.js"></script>
-        <script type="text/javascript" src="js/actions.js"></script>
+        <script type="text/javascript" src="/js/plugins.js"></script>
+        <script type="text/javascript" src="/js/actions.js"></script>
 
 
         <!-- END TEMPLATE -->

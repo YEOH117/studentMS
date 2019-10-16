@@ -21,7 +21,7 @@
                             <h3 class="panel-title"><strong>单个录入</strong></h3>
                         </div>
                         <div class="panel-body ">
-                            <p>建议使用文件批量录入，此功能再用来补录</p>
+                            <p><span class="fa fa-exclamation-circle"></span>建议使用文件批量录入，此功能再用来补录</p>
                         </div>
                         <div class="panel-body">
 

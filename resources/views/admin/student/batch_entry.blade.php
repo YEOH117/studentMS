@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-md-8 col-md-offset-2" style="height: 600px;" >
                         <div class="panel-body">
-                            <p>批量录入时请务必使用 <code>.xlsx</code> 文件格式的Excel文件！注意！使用其他格式文件，很大几率会录入失败，请知悉！</p>
+                            <p><span class="fa fa-exclamation-circle"></span>批量录入时请务必使用 <code>.xlsx</code> 文件格式的Excel文件！注意！使用其他格式文件，很大几率会录入失败，请知悉！</p>
                             <form action="{{ route('batch_entry') }}" method="post" enctype="multipart/form-data" class="form-horizontal" >
                                 <div class="form-group" style="padding-top: 50px;">
                                     {{ csrf_field() }}

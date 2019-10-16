@@ -26,7 +26,8 @@ class StudentController extends Controller
             'sex' => 'required',
         ]);
         //授权判断
-        $this->authorize('add',Profession_code::class);
+        $this->authorize('add',Student::class);
+        $this->authorize('add',User::class);
         //获取专业代码
         $professions_code = Profession_code::all();
         if(empty($professions_code)){
@@ -72,11 +73,19 @@ class StudentController extends Controller
             'class' => $class,
             'is_arrange' => '0',
         ]);
-        if(empty($student)){
+        //同时创建对应账号
+        $account = User::create([
+            'account' => $request->the_student_id,
+            'name' => $request->name,
+            'password' => bcrypt($request->the_student_id),
+            'grade' => 1,
+        ]);
+        if(empty($student) || empty($account)){
             //插入失败，报错
             session()->flash('danger','录入时发生未知错误，请稍后再试！');
             return redirect()->back();
         }
+
         //插入成功,提示成功
         session()->flash('success','录入学生成功！');
         return redirect()->back();
@@ -89,9 +98,13 @@ class StudentController extends Controller
 
     //学生-批量录入-逻辑
     public function batch_stroe(Request $request){
+        //表单验证
         $this->validate($request,[
             'upfile' => 'required',
         ]);
+        //授权判断
+        $this->authorize('add',Student::class);
+        $this->authorize('add',User::class);
         //定义上传格式
         $extension = array('xlsx','csv');
         if($request->hasFile('upfile')) {
@@ -113,7 +126,6 @@ class StudentController extends Controller
         $excel = Importer::make('Excel');
         $excel->load($path);
         $collection = $excel->getCollection();
-
         //找到学号、姓名、性别在哪列
         foreach($collection[0] as $key => $info){
             if($info == "学号"){
@@ -131,6 +143,23 @@ class StudentController extends Controller
             if($key == 0){
                 continue;
             }
+            //上传的文件数据可能会出的错误,处理-跳过
+            //1.学号为空
+            if(empty($value[$student_id_num])){
+                continue;
+            }
+            //2.名字为空
+            if(empty($value[$name_num])){
+                continue;
+            }
+            //3.性别为空
+            if(empty($value[$sex_num])){
+                continue;
+            }
+            //4.学号长度不为10位
+            if(strlen($value[$student_id_num]) != 10){
+                continue;
+            }
             $student[$key-1]['the_student_id']= $value[$student_id_num];
             $student[$key-1]['name']= $value[$name_num];
             $student[$key-1]['sex']= $value[$sex_num];
@@ -141,17 +170,14 @@ class StudentController extends Controller
         $student_id = Student::get()->pluck('the_student_id');
         //删除所有重复元素
         foreach ($student_id as $num){
-            foreach($student as $value){
+            foreach($student as $key => $value){
                 if($value['the_student_id'] == $num){
-                    array_splice($student,1,1);
+                    array_splice($student,$key,1);
                 }
             }
         }
-
         //创建学生记录
-
         foreach($student as $value){
-
             //遍历专业代码，找出学生对应专业与学院
             $code = substr($value['the_student_id'],2,5);
             $class = substr($value['the_student_id'],7,1);
@@ -162,8 +188,14 @@ class StudentController extends Controller
                     break;
                 }
             }
+            //如果找不到，报错
+            if(empty($profession) || empty($college)){
+                //插入失败，报错
+                session()->flash('danger',"姓名为：".$value['name']."学号为：".$value['the_student_id']."的学生匹配学院出错！请检查该学生的学号是否正确");
+                return redirect()->back();
+            }
             //创建学生记录
-            Student::create([
+            $st = Student::create([
                 'the_student_id' => $value['the_student_id'],
                 'name' => $value['name'],
                 'sex' => $value['sex'],
@@ -172,12 +204,19 @@ class StudentController extends Controller
                 'class' => $class,
                 'is_arrage' => 0,
             ]);
-
-
-
+            //创建对应的学生账号
+            $account = User::create([
+                'account' => $value['the_student_id'],
+                'name' => $value['name'],
+                'password' => bcrypt($value['the_student_id']),
+                'grade' => 1,
+            ]);
+            if(empty($st) || empty($account)){
+                //插入失败，报错
+                session()->flash('danger','录入时发生未知错误，请稍后再试！');
+                return redirect()->back();
+            }
         }
-
-
         //返回，提示成功
         session()->flash('success', '批量导入成功！');
         return redirect()->back();

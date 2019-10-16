@@ -15,13 +15,14 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('account')->notnull();
+            $table->bigInteger('account')->notnull();
             $table->unique('account');
             $table->string('name',50)->default('未设置名称');
             $table->string('email',30)->default('未绑定邮箱');
-            $table->string('phone',20)->notnull();
+            $table->string('phone',20)->default('未绑定手机');
             $table->string('password',200)->notnull();
             $table->string('grade',5)->notnull();
+            $table->index('grade');
             $table->timestamps();
         });
     }
