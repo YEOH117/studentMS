@@ -123,7 +123,8 @@
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-building-o"></span> <span class="xn-text">宿舍楼管理</span></a>
                 <ul>
-                    <li><a href="#"><span class="fa fa-home"></span><span class="xn-text">宿舍楼属性设置</span></a></li>
+                    <li><a href="{{ route('building_list') }}"><span class="fa fa-bars"></span><span class="xn-text">宿舍楼列表</span></a></li>
+                    <li><a href="{{ route('building_create') }}"><span class="fa fa-home"></span><span class="xn-text">添加宿舍楼</span></a></li>
                 </ul>
             </li>
             @if(Auth::check())
@@ -131,8 +132,8 @@
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-tags"></span> <span class="xn-text">专业代码管理</span></a>
                 <ul>
-                    <li><a href="#"><span class="fa fa-pencil-square"></span><span class="xn-text">专业代码添加</span></a></li>
-                    <li><a href="#"><span class="fa fa-bars"></span><span class="xn-text">专业代码列表</span></a></li>
+                    <li><a href="{{ route('profession_create') }}"><span class="fa fa-pencil-square"></span><span class="xn-text">专业代码添加</span></a></li>
+                    <li><a href="{{ route('profession_list') }}"><span class="fa fa-bars"></span><span class="xn-text">专业代码列表</span></a></li>
                 </ul>
             </li>
                 @endif
@@ -290,19 +291,20 @@
 
         <!-- START 脚本 -->
 
-        <!-- START PLUGINS -->
+        <!-- START 框架 -->
         <script type="text/javascript" src="/js/plugins/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="/js/plugins/jquery/jquery-ui.min.js"></script>
         <script type="text/javascript" src="/js/plugins/bootstrap/bootstrap.min.js"></script>
-        <!-- END PLUGINS -->
+
+        <!-- END 框架 -->
 
         <!-- START THIS PAGE PLUGINS-->
 
         <script type="text/javascript" src="/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         <script type="text/javascript" src="/js/plugins/fileinput/fileinput.min.js"></script>
 
-
-
+        <script type="text/javascript" src="/js/plugins/morris/raphael-min.js"></script>
+        <script type="text/javascript" src="/js/plugins/morris/morris.min.js"></script>
 
 
 
@@ -315,11 +317,12 @@
 
         <!-- START TEMPLATE -->
 
-
         <script type="text/javascript" src="/js/plugins.js"></script>
         <script type="text/javascript" src="/js/actions.js"></script>
 
+    @section('script')
 
+    @show
         <!-- END TEMPLATE -->
         <!-- END 脚本 -->
     </div>

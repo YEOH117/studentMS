@@ -60,6 +60,11 @@ class AdminController extends Controller
 
     //管理员账号删除逻辑
     public function delete(User $user){
+        //防止异常操作
+        if(empty($user)){
+            session()->flash('danger','地址错误！');
+            return redirect('/');
+        }
         //授权
         $this->authorize('delete',$user);
         //防止恶意操作

@@ -72,7 +72,6 @@
 
                         </div>
                         <div class="panel-footer">
-                            <a href="{{ route('single_entry') }}"><button class="btn btn-default">清除输入</button></a>
                             <button class="btn btn-primary pull-right">提交</button>
                         </div>
                     </div>

@@ -8,4 +8,8 @@ class Profession_code extends Model
 {
     //
     protected $table = 'professions_code';
+
+    protected $fillable = [
+        'college', 'profession', 'code',
+    ];
 }

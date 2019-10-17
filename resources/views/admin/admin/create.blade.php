@@ -133,7 +133,6 @@
 
                         </div>
                         <div class="panel-footer">
-                            <a href="{{ route('admin_create') }}"><button class="btn btn-default">清除输入</button></a>
                             <button class="btn btn-primary pull-right">创建</button>
                         </div>
 
