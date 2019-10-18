@@ -79,27 +79,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">大楼层数</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-home"></span></span>
-                                                <input type="text" name="layers" class="form-control" value="{{ $building->layers }}"/>
-                                            </div>
-                                            <span class="help-block">必填！</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">每层宿舍数</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-tag"></span></span>
-                                                <input type="text" name="layer_roon_num" class="form-control" value="{{ $building->layer_roon_num }}"/>
-                                            </div>
-                                            <span class="help-block">必填！</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <label class="col-md-3 col-xs-12 control-label">专业偏好</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">

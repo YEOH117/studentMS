@@ -98,7 +98,7 @@
                                         <label class="col-md-3 col-xs-12 control-label">密码</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-unlock-alt"></span></span>
+                                                <span class="input-group-addon"><span class="fa fa-lock"></span></span>
                                                 <input type="password" name="password" class="form-control"/>
                                             </div>
                                             <span class="help-block">必填！</span>
@@ -109,7 +109,7 @@
                                         <label class="col-md-3 col-xs-12 control-label">重复密码</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-unlock-alt"></span></span>
+                                                <span class="input-group-addon"><span class="fa fa-lock"></span></span>
                                                 <input type="password" name="password_confirmation" class="form-control"/>
                                             </div>
                                             <span class="help-block">必填！</span>
@@ -119,7 +119,7 @@
                                         <label class="col-md-3 col-xs-12 control-label">验证码</label>
                                         <div class="col-md-3 col-xs-6">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-barcode"></span></span>
+                                                <span class="input-group-addon"><span class="fa fa-picture-o"></span></span>
                                                 <input type="text" name="verification" class="form-control"/>
                                             </div>
                                             <span class="help-block">必填！</span>

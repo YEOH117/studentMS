@@ -37,15 +37,15 @@
                     </div>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
                                 <div id="morris-donut" style="height: 300px;"></div>
                             </div>
-                            <div class="col-md-4 title">
-                                <div class="row">
-                                    <div class="col-md-4">
+                            <div class="col-md-3 title">
+                                <div class="row" style="margin-top: 20px;">
+                                    <div class="col-md-5">
                                         <strong>大楼：</strong>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <code>
                                             @if($building->area >= 1)
                                             西
@@ -57,26 +57,26 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <strong>层数：</strong>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <code>{{ $building->layers }}层</code>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <strong>每层宿舍：</strong>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <code>{{ $building->layer_roon_num }}间</code>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <strong>男/女宿舍：</strong>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <code>
                                             @if($building->sex >= 1)
                                                 女生
@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <strong>宿舍偏好：</strong>
                                     </div>
                                     <div class="col-md-3">
@@ -99,6 +99,33 @@
                                         </ul>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-5">
+                                <table class="table  table-bordered table-condensed">
+                                    <tr class="info">
+                                        <th style="text-align: center;" colspan="{{ $building->layer_roon_num }}">
+                                            @if($building->area >= 1)
+                                                西
+                                            @else
+                                                东
+                                            @endif
+                                            {{ $building->building }}栋
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        @foreach($dormitory as $key => $value)
+                                            <td  style="text-align: center;"><a class="btn btn-xs" href="#">{{ $key }}</a></td>
+                                            @if($loop->iteration % $building->layer_roon_num == 0)
+                                                </tr>
+                                                <tr>
+                                            @endif
+
+                                        @endforeach
+                                    </tr>
+
+
+
+                                </table>
                             </div>
                         </div>
 

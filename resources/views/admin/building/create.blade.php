@@ -61,7 +61,7 @@
                                                 <span class="input-group-addon"><span class="fa fa-home"></span></span>
                                                 <input type="text" name="layers" class="form-control"/>
                                             </div>
-                                            <span class="help-block">必填！</span>
+                                            <span class="help-block">必填！<code>一旦设置，无法修改</code></span>
                                         </div>
                                     </div>
 
@@ -72,7 +72,7 @@
                                                 <span class="input-group-addon"><span class="fa fa-tag"></span></span>
                                                 <input type="text" name="layer_roon_num" class="form-control"/>
                                             </div>
-                                            <span class="help-block">必填！</span>
+                                            <span class="help-block">必填！<code>一旦设置，无法修改</code></span>
                                         </div>
                                     </div>
                                     <div class="form-group">

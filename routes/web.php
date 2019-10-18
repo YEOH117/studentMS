@@ -55,3 +55,9 @@ Route::get('/building/{building}/edit','Home\BuildingController@edit')->name('bu
 Route::post('/building/{building}/edit','Home\BuildingController@update');
 //宿舍楼管理_删除
 Route::get('/building/{building}/del','Home\BuildingController@delete');
+//宿舍楼管理_宿舍初始化
+Route::get('/building/{id}/init','Home\BuildingController@init')->name('building_init');
+Route::post('/building/{building}/init','Home\BuildingController@initing');
+
+//宿舍管理_新生排宿—全部
+Route::get('/Student/allSort','Home\DormitoryController@allNewStudent')->name('student_all_new');
