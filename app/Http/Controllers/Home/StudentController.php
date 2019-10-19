@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Models\Dormitory_member;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -227,7 +228,27 @@ class StudentController extends Controller
     }
 
     //学生-查询信息页
-    public function show(Request $request){
+    public function search(Request $request){
+        return view('student.search');
+    }
 
+    //学生-查询信息逻辑
+    public function show(Request $request){
+        //验证表单
+        $this->validate($request,[
+            'studentId' => 'required',
+        ]);
+        //分隔学号
+        $studentId = explode(';',$request->studentId);
+        //查询学生信息
+        $student = Student::whereIn('the_student_id',$studentId)->get();
+        //查询住宿信息
+        $i = 0;
+        foreach ($student as $value){
+            $dormitory[$i] = $value->dormitory_member->dormitory;
+            $building[$i] = $dormitory[$i]->building;
+            ++$i;
+        }
+        return view('student.show',compact('student','dormitory','building'));
     }
 }

@@ -56,7 +56,7 @@
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-search"></span> <span class="xn-text">信息查询</span></a>
                 <ul>
-                    <li><a href="#"><span class="fa fa-user"></span> 学生信息查询</a></li>
+                    <li><a href="{{ route('student_show') }}"><span class="fa fa-user"></span> 学生信息查询</a></li>
                     <li><a href="#"><span class="fa fa-users"></span> 宿舍信息查询</a></li>
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-clock-o"></span> 预留部分</a>

@@ -63,3 +63,7 @@ Route::get('/Student/Sort','Home\DormitoryController@NewStudent')->name('student
 Route::post('/Student/Sort','Home\DormitoryController@sort')->name('student_sort');
 
 //查询_学生住宿与个人信息查询
+Route::get('/student/search','Home\StudentController@search')->name('student_show');
+Route::post('/student/search','Home\StudentController@show')->name('student_show');
+
+
