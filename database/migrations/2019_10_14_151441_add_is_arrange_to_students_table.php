@@ -16,6 +16,7 @@ class AddIsArrangeToStudentsTable extends Migration
         Schema::table('students', function (Blueprint $table) {
             //
             $table->string('is_arrange',2)->default('0');
+            $table->index('is_arrange');
         });
     }
 

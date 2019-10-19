@@ -21,7 +21,6 @@ Route::post('/login','Home\SessionController@store')->name('login');
 //学生录入_单人录入
 Route::get('/student/single_entry','Home\StudentController@single_entry')->name('single_entry');
 Route::post('/student/single_entry','Home\StudentController@stroe')->name('single_entry');
-
 //学生录入_批量录入
 Route::get('/student/batch_entry','Home\StudentController@batch_entry')->name('batch_entry');
 Route::post('/student/batch_entry','Home\StudentController@batch_stroe')->name('batch_entry');
@@ -60,4 +59,7 @@ Route::get('/building/{id}/init','Home\BuildingController@init')->name('building
 Route::post('/building/{building}/init','Home\BuildingController@initing');
 
 //宿舍管理_新生排宿—全部
-Route::get('/Student/allSort','Home\DormitoryController@allNewStudent')->name('student_all_new');
+Route::get('/Student/Sort','Home\DormitoryController@NewStudent')->name('student_sort');
+Route::post('/Student/Sort','Home\DormitoryController@sort')->name('student_sort');
+
+//查询_学生住宿与个人信息查询

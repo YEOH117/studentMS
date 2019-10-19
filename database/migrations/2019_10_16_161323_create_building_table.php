@@ -20,8 +20,11 @@ class CreateBuildingTable extends Migration
             $table->tinyInteger('building')->notnull();
             $table->index('building');
             $table->tinyInteger('sex')->notnull();
+            $table->index('sex');
             $table->string('preference',200)->notnull();
+            $table->index('preference');
             $table->integer('empty_num')->notnull();
+            $table->index('empty_num');
             $table->timestamps();
         });
     }

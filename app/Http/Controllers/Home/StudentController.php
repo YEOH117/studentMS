@@ -14,6 +14,8 @@ class StudentController extends Controller
 {
     //学生-单个录入-页面
     public function single_entry(){
+        //授权
+        $this->authorize('add',Student::class);
         return view('admin/student/single_entry');
     }
 
@@ -93,6 +95,8 @@ class StudentController extends Controller
 
     //学生-批量录入-页面
     public function batch_entry(){
+        //授权
+        $this->authorize('add',Student::class);
         return view('admin.student.batch_entry');
     }
 
@@ -220,5 +224,10 @@ class StudentController extends Controller
         //返回，提示成功
         session()->flash('success', '批量导入成功！');
         return redirect()->back();
+    }
+
+    //学生-查询信息页
+    public function show(Request $request){
+
     }
 }

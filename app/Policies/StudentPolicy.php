@@ -14,6 +14,10 @@ class StudentPolicy
         return $user->grade >= 2;
     }
 
+    public function general(User $user){
+        return $user->grade >= 2;
+    }
+
     /**
      * Determine whether the user can view the student.
      *

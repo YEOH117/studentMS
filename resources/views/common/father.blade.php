@@ -89,7 +89,7 @@
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-calendar"></span> <span class="xn-text">宿舍管理</span></a>
                 <ul>
-                    <li><a href="#"><span class="fa fa-random"></span> 新生智能排宿</a></li>
+                    <li><a href="{{ route('student_sort') }}"><span class="fa fa-random"></span> 新生智能排宿</a></li>
                     <li>
                         <a href="#"><span class="fa fa-refresh"></span> 宿舍调换</a>
                         <div class="informer informer-danger">新</div>
@@ -300,14 +300,17 @@
 
         <!-- START THIS PAGE PLUGINS-->
 
+
+
+
         <script type="text/javascript" src="/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         <script type="text/javascript" src="/js/plugins/fileinput/fileinput.min.js"></script>
 
         <script type="text/javascript" src="/js/plugins/morris/raphael-min.js"></script>
         <script type="text/javascript" src="/js/plugins/morris/morris.min.js"></script>
 
-
-
+        <script type='text/javascript' src='/js/plugins/icheck/icheck.min.js'></script>
+        <script type="text/javascript" src="/js/plugins/bootstrap/bootstrap-datepicker.js"></script>
 
 
 
