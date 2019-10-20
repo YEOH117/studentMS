@@ -14,4 +14,8 @@ class Student extends Model
     public function dormitory_member(){
         return $this->hasOne('App\Models\Dormitory_member','student_id','id');
     }
+
+    public function user(){
+        return $this->hasOne('App\Models\User','account','the_student_id');
+    }
 }

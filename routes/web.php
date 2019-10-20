@@ -66,4 +66,5 @@ Route::post('/Student/Sort','Home\DormitoryController@sort')->name('student_sort
 Route::get('/student/search','Home\StudentController@search')->name('student_show');
 Route::post('/student/search','Home\StudentController@show')->name('student_show');
 
-
+//学生信息导出
+Route::post('/student/export','Home\StudentController@export')->name('student_export');

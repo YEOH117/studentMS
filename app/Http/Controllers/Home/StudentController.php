@@ -10,6 +10,7 @@ use App\Models\Profession_code;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
 use Importer;
+use Exporter;
 
 class StudentController extends Controller
 {
@@ -241,14 +242,55 @@ class StudentController extends Controller
         //分隔学号
         $studentId = explode(';',$request->studentId);
         //查询学生信息
-        $student = Student::whereIn('the_student_id',$studentId)->get();
-        //查询住宿信息
+        $student = Student::whereIn('the_student_id',$studentId)->where('is_arrange',1)->get();
+        if(empty($student)){
+            session()->flash('danger','查询的学生不存在！请检查输入是否有误');
+            return redirect()->back();
+        }
+        //查询住宿信息与手机 邮箱信息
         $i = 0;
         foreach ($student as $value){
             $dormitory[$i] = $value->dormitory_member->dormitory;
             $building[$i] = $dormitory[$i]->building;
+            $user[$i] = $value->user;
             ++$i;
         }
-        return view('student.show',compact('student','dormitory','building'));
+        return view('student.show',compact('student','dormitory','building','user'));
+    }
+
+    //学生-信息导出
+    public function export(Request $request){
+        if($request->has('single')){
+            $info = Student::whereIn('id',$request->single)->select('the_student_id','name','sex','profession','class','college')->orderBy('the_student_id','asc')->get();
+
+            foreach ($info as $key => $value){
+                $num[$key] = $value->the_student_id;
+            }
+            $information[0] = ['学号','姓名','性别','学院','专业','班级','手机号','邮箱'];
+            $user = User::whereIn('account',$num)->select('account','phone','email')->orderBy('account','asc')->get();
+            foreach ($info as $key => $value){
+                $information[$key+1][0] = $value->the_student_id;
+                $information[$key+1][1] = $value->name;
+                $information[$key+1][2] = $value->sex;
+                $information[$key+1][3] = $value->college;
+                $information[$key+1][4] = $value->profession;
+                $information[$key+1][5] = $value->class.'班';
+                if($value->the_student_id == $user[$key]->account){
+                    $information[$key+1][6] = $user[$key]->phone;
+                    $information[$key+1][7] = $user[$key]->email;
+                }else{
+                    $information[$key+1][6] = null;
+                    $information[$key+1][7] = null;
+                }
+            }
+            $info = collect($information);
+            //dump($info);
+            $excel = Exporter::make('Excel');
+            $excel->load($info);
+            $name = 'storage/'.date('Y-m-d-h-i-s').rand(0,9).'.xlsx';
+            $excel->save($name);
+            return response()->download($name,'学生信息表.xlsx');
+        }else{
+        }
     }
 }
