@@ -309,7 +309,7 @@ class StudentController extends Controller
             'area' => 'required',
             'building' => 'required',
             'dormitory' => 'required',
-            //'verification' => 'required|captcha',
+            'verification' => 'required|captcha',
         ]);
         //分隔宿舍号，第一步先将中文的分号替换成英语的标点
         $dormitoryId = str_replace('；',';',$request->dormitory);
@@ -321,10 +321,10 @@ class StudentController extends Controller
         }
         //查询大楼id
         $buildingId = Building::where('area',$request->area)->where('building',$request->building)->select('id')->first();
-        if($buildingId->count() <= 0){
+        if(empty($buildingId)){
             //如果没查询到大楼，报错
             session()->flash('danger','大楼不存在，请检查你的填写是否有误！');
-            //return redirect()->back();
+            return redirect()->back();
         }
         //将对象转化为一维数组
         $buildingId = collect($buildingId)->flatten();
