@@ -28,20 +28,9 @@
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-building-o"></span></span>
-                                                <input type="text" name="studentId" class="form-control"/>
+                                                <input type="text" name="the_student_id" class="form-control"/>
                                             </div>
                                             <span class="help-block">必填！可填写多个，多个之间以<code>；</code>(分号)分隔。</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">名字</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-home"></span></span>
-                                                <input type="text" name="name" class="form-control"/>
-                                            </div>
-                                            <span class="help-block">选填！</span>
                                         </div>
                                     </div>
 
@@ -54,7 +43,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-xs-12">
-                                            <img src="#" alt="验证码">
+                                            <img src="{{ captcha_src() }}" onclick="this.src='{{captcha_src()}}'+Math.random()">
                                         </div>
                                     </div>
                                 </div>

@@ -4,7 +4,7 @@
     <ul class="breadcrumb">
         <li><a href="{{ Route('/') }}">主页</a></li>
         <li><a href="#">信息查询</a></li>
-        <li class="active">学生信息详情页</li>
+        <li class="active">学生宿舍信息详情页</li>
     </ul>
 @endsection
 
@@ -33,36 +33,42 @@
                         <div class="col-md-1">手机号</div>
                         <div class="col-md-2">邮箱</div>
                     </div>
-                    @foreach($student as $value)
+                    @foreach($student as $key => $s)
                         <div class="mail-item mail-unread  row">
-
-                            <div class="mail-checkbox ">
-                                <input type="checkbox" name="single[]" value="{{ $value->id }}" class="icheckbox"/>
-                            </div>
-
-                            <div class="col-md-1 ">{{ $value->name }}</div>
-
-                            <div class="col-md-1">{{ $value->the_student_id }}</div>
-
-                            <div class="col-md-1">{{ $value->sex }}</div>
-
-                            <div class="col-md-2">{{ $value->college }}</div>
-
-                            <div class="col-md-1">{{ $value->profession }}</div>
-                            <div class="col-md-1">{{ $value->class }}班</div>
-
-                            <div class="col-md-1">
-                                @if($building[$loop->index]->area > 0)
-                                    西
-                                @else
-                                    东
-                                @endif
-                                {{ $building[$loop->index]->building }}栋 {{ $dormitory[$loop->index]->house_num }}宿舍
-                            </div>
-                            <div class="col-md-1">{{ $value->phone }}</div>
-                            <div class="col-md-2">{{ $value->email }}</div>
+                            <div class="col-md-12 ">{{ $dormitoryId[$key] }}宿舍</div>
                         </div>
+                        @foreach($s as $value)
+                            <div class="mail-item mail-unread  row">
+
+                                <div class="mail-checkbox ">
+                                    <input type="checkbox" name="single[]" value="{{ $value->id }}" class="icheckbox"/>
+                                </div>
+
+                                <div class="col-md-1 ">{{ $value->name }}</div>
+
+                                <div class="col-md-1">{{ $value->the_student_id }}</div>
+
+                                <div class="col-md-1">{{ $value->sex }}</div>
+
+                                <div class="col-md-2">{{ $value->college }}</div>
+
+                                <div class="col-md-1">{{ $value->profession }}</div>
+                                <div class="col-md-1">{{ $value->class }}班</div>
+
+                                <div class="col-md-1">
+                                    @if($area > 0)
+                                        西
+                                    @else
+                                        东
+                                    @endif
+                                    {{ $building }}栋 {{  $dormitoryId[$key] }}宿舍
+                                </div>
+                                <div class="col-md-1">{{ $value->phone }}</div>
+                                <div class="col-md-2">{{ $value->email }}</div>
+                            </div>
+                        @endforeach
                     @endforeach
+
 
                 </div>
                 <div class="panel-footer">
@@ -72,7 +78,7 @@
 
                     </ul>
                     @if(Auth::user()->grade >= 2)
-                    <button type="submit" class="btn btn-info pull-right">导出选中</button>
+                        <button type="submit" class="btn btn-info pull-right">导出选中</button>
                     @endif
                 </div>
             </form>

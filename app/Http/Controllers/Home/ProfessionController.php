@@ -27,7 +27,8 @@ class ProfessionController extends Controller
         $this->validate($request,[
            'college' => 'required',
             'profession' => 'required',
-            'code' => 'required|max:5|min:5|unique:professions_code,code'
+            'code' => 'required|max:5|min:5|unique:professions_code,code',
+            'verification' => 'required|captcha',
         ]);
         //授权
         $this->authorize('create',Profession_code::class);
@@ -71,7 +72,8 @@ class ProfessionController extends Controller
         $this->validate($request,[
             'college' => 'required',
             'profession' => 'required',
-            'code' => 'required|max:5|min:5'
+            'code' => 'required|max:5|min:5',
+            'verification' => 'required|captcha',
         ]);
         //授权
         $this->authorize('create',Profession_code::class);

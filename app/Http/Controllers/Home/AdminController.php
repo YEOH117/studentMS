@@ -32,6 +32,7 @@ class AdminController extends Controller
             'phone' => 'max:12|unique:users,phone',
             'grade' => 'required',
             'password' => 'max:25|min:6|required|confirmed',
+            'verification' => 'required|captcha',
         ]);
         //授权
         $this->authorize('add',User::class);

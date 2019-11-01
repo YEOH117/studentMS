@@ -16,4 +16,8 @@ class Dormitory extends Model
     public function building(){
         return $this->belongsTo('App\Models\Building','building_id','id');
     }
+
+    public function dormitory_member(){
+        return $this->hasMany('App\Models\Dormitory_member','dormitory_id','id');
+    }
 }

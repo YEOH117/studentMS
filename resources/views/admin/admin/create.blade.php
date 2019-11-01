@@ -125,7 +125,7 @@
                                             <span class="help-block">必填！</span>
                                         </div>
                                         <div class="col-md-3 col-xs-6">
-                                            <img src="" alt="验证码">
+                                            <img src="{{ captcha_src() }}" onclick="this.src='{{captcha_src()}}'+Math.random()">
                                         </div>
                                     </div>
                                 </div>

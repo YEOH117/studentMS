@@ -3,8 +3,8 @@
 @section('navigation')
     <ul class="breadcrumb">
         <li><a href="{{ Route('/') }}">主页</a></li>
-        <li><a href="#">宿舍楼管理</a></li>
-        <li class="active">添加宿舍楼</li>
+        <li><a href="#">信息查询</a></li>
+        <li class="active">宿舍学生信息查询</li>
     </ul>
 @endsection
 
@@ -14,11 +14,11 @@
         <div class="row">
             <div class="col-md-12" >
 
-                <form class="form-horizontal" action="{{ route('building_create') }}" method="post">
+                <form class="form-horizontal" action="{{ route('student_dormitory_show') }}" method="post">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>添加新的宿舍楼</strong></h3>
+                            <h3 class="panel-title"><strong>宿舍学生信息查询</strong></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -34,17 +34,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">男/女宿舍楼</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <select  class="form-control" name="sex">
-                                                <option value="0">男生宿舍楼</option>
-                                                <option value="1">女生宿舍楼</option>
-                                            </select>
-                                            <span class="help-block">必选！</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">楼号</label>
+                                        <label class="col-md-3 col-xs-12 control-label">大楼</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-building-o"></span></span>
@@ -53,36 +43,14 @@
                                             <span class="help-block">必填！</span>
                                         </div>
                                     </div>
-
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">大楼层数</label>
+                                        <label class="col-md-3 col-xs-12 control-label">宿舍</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-home"></span></span>
-                                                <input type="text" name="layers" class="form-control"/>
+                                                <input type="text" name="dormitory" class="form-control"/>
                                             </div>
-                                            <span class="help-block">必填！<code>一旦设置，无法修改</code></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">每层宿舍数</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-tag"></span></span>
-                                                <input type="text" name="layer_roon_num" class="form-control"/>
-                                            </div>
-                                            <span class="help-block">必填！<code>一旦设置，无法修改</code></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">专业偏好</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-tag"></span></span>
-                                                <input type="text" name="preference" class="form-control"/>
-                                            </div>
-                                            <span class="help-block">填写专业代码！可以填写多个，每个之间以 <code>;</code>（分号）分隔。</span>
+                                            <span class="help-block">必填！可填写多个，多个之间以<code>；</code>(分号)分隔。</span>
                                         </div>
                                     </div>
 
@@ -103,7 +71,7 @@
 
                         </div>
                         <div class="panel-footer">
-                            <button class="btn btn-primary pull-right">添加</button>
+                            <button class="btn btn-primary pull-right">查询</button>
                         </div>
 
                     </div>

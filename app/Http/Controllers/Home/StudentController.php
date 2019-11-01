@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Home;
 
+use App\Models\Dormitory;
 use App\Models\Dormitory_member;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Profession_code;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Student;
+use App\Models\Building;
 use Importer;
 use Exporter;
 
@@ -132,7 +134,7 @@ class StudentController extends Controller
         $excel = Importer::make('Excel');
         $excel->load($path);
         $collection = $excel->getCollection();
-        //找到学号、姓名、性别在哪列
+        //找到学号、姓名、性别、邮箱、手机在哪列
         foreach($collection[0] as $key => $info){
             if($info == "学号"){
                 $student_id_num = $key;
@@ -237,13 +239,15 @@ class StudentController extends Controller
     public function show(Request $request){
         //验证表单
         $this->validate($request,[
-            'studentId' => 'required',
+            'the_student_id' => 'required',
+            'verification' => 'required|captcha',
         ]);
         //分隔学号
-        $studentId = explode(';',$request->studentId);
+        $studentId = str_replace('；',';',$request->the_student_id);
+        $studentId = explode(';',$studentId);
         //查询学生信息
         $student = Student::whereIn('the_student_id',$studentId)->where('is_arrange',1)->get();
-        if(empty($student)){
+        if($student->count() <= 0){
             session()->flash('danger','查询的学生不存在！请检查输入是否有误');
             return redirect()->back();
         }
@@ -252,22 +256,23 @@ class StudentController extends Controller
         foreach ($student as $value){
             $dormitory[$i] = $value->dormitory_member->dormitory;
             $building[$i] = $dormitory[$i]->building;
-            $user[$i] = $value->user;
             ++$i;
         }
-        return view('student.show',compact('student','dormitory','building','user'));
+        return view('student.show',compact('student','dormitory','building'));
     }
 
     //学生-信息导出
     public function export(Request $request){
         if($request->has('single')){
-            $info = Student::whereIn('id',$request->single)->select('the_student_id','name','sex','profession','class','college')->orderBy('the_student_id','asc')->get();
-
+            //查询学生信息
+            $info = Student::whereIn('id',$request->single)->select('the_student_id','name','sex','profession','class','college','email','phone')->orderBy('the_student_id','asc')->get();
+            //获取查询学生的学号
             foreach ($info as $key => $value){
                 $num[$key] = $value->the_student_id;
             }
-            $information[0] = ['学号','姓名','性别','学院','专业','班级','手机号','邮箱'];
-            $user = User::whereIn('account',$num)->select('account','phone','email')->orderBy('account','asc')->get();
+            //初始化Excel文件的第一行
+            $information[0] = ['学号','姓名','性别','学院','专业','班级','邮箱','手机号码'];
+            //添加到information里
             foreach ($info as $key => $value){
                 $information[$key+1][0] = $value->the_student_id;
                 $information[$key+1][1] = $value->name;
@@ -275,22 +280,89 @@ class StudentController extends Controller
                 $information[$key+1][3] = $value->college;
                 $information[$key+1][4] = $value->profession;
                 $information[$key+1][5] = $value->class.'班';
-                if($value->the_student_id == $user[$key]->account){
-                    $information[$key+1][6] = $user[$key]->phone;
-                    $information[$key+1][7] = $user[$key]->email;
-                }else{
-                    $information[$key+1][6] = null;
-                    $information[$key+1][7] = null;
-                }
+                $information[$key+1][6] = $value->email;
+                $information[$key+1][7] = $value->phone;
             }
+            //转化类型
             $info = collect($information);
-            //dump($info);
+            //使用插件导出Excel文件
             $excel = Exporter::make('Excel');
             $excel->load($info);
-            $name = 'storage/'.date('Y-m-d-h-i-s').rand(0,9).'.xlsx';
+            $name = 'storage/student/'.date('Y-m-d-h-i-s').rand(0,9).'.xlsx';
             $excel->save($name);
             return response()->download($name,'学生信息表.xlsx');
         }else{
+            session()->flash('danger','您还没有选择要导出的对象！');
+            return redirect()->back();
         }
     }
+
+    //学生-宿舍学生信息查询页
+    public function dormitorySearch(){
+        return view('student.dormitorySearch');
+    }
+
+    //学生-宿舍学生信息查询逻辑
+    public function dormitoryShow(Request $request){
+        //验证表单
+        $this->validate($request,[
+            'area' => 'required',
+            'building' => 'required',
+            'dormitory' => 'required',
+            //'verification' => 'required|captcha',
+        ]);
+        //分隔宿舍号，第一步先将中文的分号替换成英语的标点
+        $dormitoryId = str_replace('；',';',$request->dormitory);
+        $dormitoryId = explode(";",$dormitoryId);
+        if(empty($dormitoryId)){
+            //输入有误 报错
+            session()->flash('danger','宿舍填写有误，请检查你的填写！');
+            return redirect()->back();
+        }
+        //查询大楼id
+        $buildingId = Building::where('area',$request->area)->where('building',$request->building)->select('id')->first();
+        if($buildingId->count() <= 0){
+            //如果没查询到大楼，报错
+            session()->flash('danger','大楼不存在，请检查你的填写是否有误！');
+            //return redirect()->back();
+        }
+        //将对象转化为一维数组
+        $buildingId = collect($buildingId)->flatten();
+        //查询宿舍信息
+        $dormitory = Dormitory::where('building_id',$buildingId)->whereIn('house_num',$dormitoryId)->select('id')->get();
+        if($dormitory->count()  <= 0){
+            //如果没查询到宿舍，报错
+            session()->flash('danger','宿舍不存在或已关闭，请检查你的填写是否有误！');
+            return redirect()->back();
+        }
+        //临时变量
+        $studentId = [];
+        //查询学生id
+        foreach ($dormitory as $key => $value){
+            $s = Dormitory_member::where('dormitory_id',$value->id)->select('student_id')->get();
+            if($s->count() <= 0){
+                continue;
+            }
+            //循环获取学生id
+            foreach ($s as $k => $value){
+                $studentId[$k] = $value->student_id;
+            }
+            if(empty($studentId)){
+                continue;
+            }
+            //查询学生信息
+            $student[$key]= Student::whereIn('id',$studentId)->select('id','the_student_id','name','sex','profession','college','class','email','phone')->get();
+        }
+        if(empty($student)){
+            //查询的宿舍无人入住
+            session()->flash('danger','查询的宿舍暂无人员入住！');
+            return redirect()->back();
+        }
+        //其他信息（大楼，区域信息）
+        $building = $request->building;
+        $area = $request->area;
+        return view('student.dormitoryShow',compact('student','dormitoryId','building','area'));
+    }
+
+
 }

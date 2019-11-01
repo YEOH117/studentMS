@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-3 col-xs-12">
-                                            <img src="#" alt="验证码">
+                                            <img src="{{ captcha_src() }}" onclick="this.src='{{captcha_src()}}'+Math.random()">
                                         </div>
                                     </div>
                                 </div>

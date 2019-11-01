@@ -26,7 +26,7 @@
         <!-- START X-NAVIGATION -->
         <ul class="x-navigation">
             <li class="xn-logo">
-                <a href="index.html">北部湾大学</a>
+                <a href="/">北部湾大学</a>
                 <a href="#" class="x-navigation-control"></a>
             </li>
             <li class="xn-profile">
@@ -57,7 +57,7 @@
                 <a href="#"><span class="fa fa-search"></span> <span class="xn-text">信息查询</span></a>
                 <ul>
                     <li><a href="{{ route('student_show') }}"><span class="fa fa-user"></span> 学生信息查询</a></li>
-                    <li><a href="#"><span class="fa fa-users"></span> 宿舍信息查询</a></li>
+                    <li><a href="{{ route('student_dormitory_show') }}"><span class="fa fa-users"></span> 宿舍信息查询</a></li>
                     <li class="xn-openable">
                         <a href="#"><span class="fa fa-clock-o"></span> 预留部分</a>
                         <ul>
@@ -114,7 +114,7 @@
                 </ul>
             </li>
             <li class="xn-openable">
-                <a href="tables.html"><span class="fa fa-gears"></span> <span class="xn-text">管理员账号管理</span></a>
+                <a href="#"><span class="fa fa-gears"></span> <span class="xn-text">管理员账号管理</span></a>
                 <ul>
                     <li><a href="{{ route('admin_list') }}"><span class="fa fa-align-justify"></span> 账号列表</a></li>
                     <li><a href="{{ route('admin_create') }}"><span class="fa fa-eraser"></span> 创建新账号</a></li>
@@ -123,8 +123,8 @@
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-building-o"></span> <span class="xn-text">宿舍楼管理</span></a>
                 <ul>
-                    <li><a href="{{ route('building_list') }}"><span class="fa fa-bars"></span><span class="xn-text">宿舍楼列表</span></a></li>
-                    <li><a href="{{ route('building_create') }}"><span class="fa fa-home"></span><span class="xn-text">添加宿舍楼</span></a></li>
+                    <li><a href="{{ route('building_list') }}"><span class="fa fa-bars"></span>宿舍楼列表</a></li>
+                    <li><a href="{{ route('building_create') }}"><span class="fa fa-home"></span>添加宿舍楼</a></li>
                 </ul>
             </li>
             @if(Auth::check())
@@ -132,8 +132,8 @@
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-tags"></span> <span class="xn-text">专业代码管理</span></a>
                 <ul>
-                    <li><a href="{{ route('profession_create') }}"><span class="fa fa-pencil-square"></span><span class="xn-text">专业代码添加</span></a></li>
-                    <li><a href="{{ route('profession_list') }}"><span class="fa fa-bars"></span><span class="xn-text">专业代码列表</span></a></li>
+                    <li><a href="{{ route('profession_create') }}"><span class="fa fa-pencil-square"></span>专业代码添加</a></li>
+                    <li><a href="{{ route('profession_list') }}"><span class="fa fa-bars"></span>专业代码列表</a></li>
                 </ul>
             </li>
                 @endif

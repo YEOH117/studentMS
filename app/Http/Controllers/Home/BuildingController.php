@@ -41,6 +41,7 @@ class BuildingController extends Controller
             'layers' => 'required',
             'layer_roon_num' => 'required',
             'preference' => 'required',
+            'verification' => 'required|captcha',
         ]);
         //查询楼号是否重复
         $building = Building::where('area',$request->area)->where('building',$request->building)->first();
@@ -114,6 +115,7 @@ class BuildingController extends Controller
             'sex' => 'required',
             'building' => 'required',
             'preference' => 'required',
+            'verification' => 'required|captcha',
         ]);
         //授权
         $this->authorize('update',Building::class);
@@ -163,6 +165,7 @@ class BuildingController extends Controller
         //表单验证
         $this->validate($request,[
            'roon_num' => 'required',
+            'verification' => 'required|captcha',
         ]);
         //获取大楼的层数，及每层的宿舍数
         $FloorNum = $building->layers;

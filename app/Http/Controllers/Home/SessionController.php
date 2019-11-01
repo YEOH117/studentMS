@@ -19,6 +19,7 @@ class SessionController extends Controller
         $this->validate($request,[
             'account' => 'required|max:100',
             'password' => 'required',
+            'verification' => 'required|captcha',
         ]);
         //账号密码验证
         if(Auth::attempt(['account' => $request->account, 'password' => $request->password, ], $request->has('remember'))){

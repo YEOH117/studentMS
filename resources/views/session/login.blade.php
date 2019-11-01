@@ -38,8 +38,8 @@
                         <div class="col-md-8">
                             <input type="text" name="verification" class="form-control" placeholder="验证码"/>
                         </div>
-                        <div class="col-md-4">
-                            <img src="#">
+                        <div class="col-md-4" style="padding-left: 0;">
+                            <img src="{{ captcha_src() }}" onclick="this.src='{{captcha_src()}}'+Math.random()">
                         </div>
                     </div>
                     <div class="form-group">
