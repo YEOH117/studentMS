@@ -32,7 +32,7 @@
                             <tr>
                             @foreach($area_0 as $key => $value)
                                 <td  style="text-align: center;"><a class="btn" href="/building/show/{{ $value->id }}">东{{ $value->building }}栋</a></td>
-                            @if($key % 4 == 0 && $key > 0)
+                            @if($key+1 % 5 == 0 && $key > 0)
                             </tr>
                             <tr>
                             @endif
@@ -47,7 +47,7 @@
                             <tr>
                             @foreach($area_1 as $key => $value)
                                 <td  style="text-align: center;"><a class="btn" href="/building/show/{{ $value->id }}">西{{ $value->building }}栋</a></td>
-                            @if($key % 4 == 0 && $key > 0)
+                            @if($key+1 % 5 == 0 && $key > 0)
                             </tr>
                             <tr>
                             @endif

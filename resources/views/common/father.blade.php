@@ -57,18 +57,12 @@
                 <a href="#"><span class="fa fa-search"></span> <span class="xn-text">信息查询</span></a>
                 <ul>
                     <li><a href="{{ route('student_show') }}"><span class="fa fa-user"></span> 学生信息查询</a></li>
-                    <li><a href="{{ route('student_dormitory_show') }}"><span class="fa fa-users"></span> 宿舍信息查询</a></li>
-                    <li class="xn-openable">
-                        <a href="#"><span class="fa fa-clock-o"></span> 预留部分</a>
-                        <ul>
-                            <li><a href="pages-timeline.html"><span class="fa fa-align-center"></span> Default</a></li>
-                            <li><a href="pages-timeline-simple.html"><span class="fa fa-align-justify"></span> Full Width</a></li>
-                        </ul>
-                    </li>
-
-
-
-
+                    <li><a href="{{ route('student_dormitory_show') }}"><span class="fa fa-users"></span> 宿舍学生信息查询</a></li>
+                @if(Auth::user()->grade >= 2)
+                    <li><a href="{{ route('student_building_show') }}"><span class="fa fa-users"></span> 大楼学生信息查询</a></li>
+                    <li><a href="{{ route('student_dormitory_show') }}"><span class="fa fa-users"></span> 班级学生信息查询</a></li>
+                    <li><a href="{{ route('student_dormitory_show') }}"><span class="fa fa-users"></span> 班级学生信息查询</a></li>
+                @endif
                 </ul>
             </li>
             <li class="xn-openable">
