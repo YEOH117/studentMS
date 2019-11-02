@@ -172,12 +172,7 @@ class DormitoryController extends Controller
 //                                session()->flash('danger','出现未知错误，请稍后再试！');
 //                                return redirect('/');
 //                            }
-//                            //更新学生已安排宿舍信息
-//                            Student::whereIn('id',$id)->update([
-//                                'is_arrange' => 1,
-//                            ]);
-                            //更新学生已安排宿舍信息
-                            event( new UpdateIsArrange($id));
+
                         }else{
                             //没有空位
                             //获取宿舍号
@@ -197,17 +192,17 @@ class DormitoryController extends Controller
                             }
                             //创建学生人员记录
                             event(new CreateDormitoryMember($dormitory->id,$value['id']));
-//                            //更新学生已安排宿舍信息
-//                            Student::whereIn('id',$id)->update([
-//                                'is_arrange' => 1,
-//                            ]);
-                            //更新学生已安排宿舍信息
-                            event( new UpdateIsArrange($id));
                             //重新获取宿舍剩余人数，并设置宿舍楼空余宿舍-1
                             $RemainNume = $dormitory->Remain_number;
                             $empty_num -= 1;
                         }
                     }
+//                            //更新学生已安排宿舍信息
+//                            Student::whereIn('id',$id)->update([
+//                                'is_arrange' => 1,
+//                            ]);
+                    //更新学生已安排宿舍信息
+                    event( new UpdateIsArrange($id));
                     //块排宿完毕，更新宿舍剩余人数与宿舍偏好
                     $dormitory->preference = $ClassId;
                     $dormitory->Remain_number = $RemainNume;
@@ -314,12 +309,6 @@ class DormitoryController extends Controller
 //                                session()->flash('danger','出现未知错误，请稍后再试！');
 //                                return redirect('/');
 //                            }
-//                            //更新学生已安排宿舍信息
-//                            Student::whereIn('id',$id)->update([
-//                                'is_arrange' => 1,
-//                            ]);
-                            //更新学生已安排宿舍信息
-                            event( new UpdateIsArrange($id));
                         }else{
                             //没有空位
                             //获取宿舍号
@@ -339,17 +328,17 @@ class DormitoryController extends Controller
                             }
                             //创建宿舍人员记录
                             event(new CreateDormitoryMember($dormitory->id,$value['id']));
-//                            //更新学生已安排宿舍信息
-//                            Student::whereIn('id',$id)->update([
-//                                'is_arrange' => 1,
-//                            ]);
-                            //更新学生已安排宿舍信息
-                            event( new UpdateIsArrange($id));
                             //重新获取宿舍剩余人数，并设置宿舍楼空余宿舍-1
                             $RemainNume = $dormitory->Remain_number;
                             $empty_num -= 1;
                         }
                     }
+//                            //更新学生已安排宿舍信息
+//                            Student::whereIn('id',$id)->update([
+//                                'is_arrange' => 1,
+//                            ]);
+                    //更新学生已安排宿舍信息
+                    event( new UpdateIsArrange($id));
                     //块排宿完毕，更新宿舍剩余人数与宿舍偏好
                     $dormitory->preference = $ClassId;
                     $dormitory->Remain_number = $RemainNume;
