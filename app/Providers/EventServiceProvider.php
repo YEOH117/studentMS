@@ -16,6 +16,12 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\BatchEntry' => [
             'App\Listeners\BatchEntryListener',
         ],
+        'App\Events\CreateDormitoryMember' => [
+            'App\Listeners\CreateDormitoryMemberListener',
+        ],
+        'App\Events\UpdateIsArrange' => [
+            'App\Listeners\UpdateIsArrangeListener',
+        ],
     ];
 
     /**

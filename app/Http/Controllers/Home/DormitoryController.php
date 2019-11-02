@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use App\Models\Building;
 use App\Models\Dormitory;
+use App\Events\CreateDormitoryMember;
+use App\Events\UpdateIsArrange;
 
 class DormitoryController extends Controller
 {
@@ -159,19 +161,23 @@ class DormitoryController extends Controller
                         $RemainNume -= 1;
                         if($RemainNume >= 0){
                             //有空位
-                            $DormitoryMember = Dormitory_member::create([
-                                'dormitory_id' => $dormitory->id,
-                                'student_id' => $value['id'],
-                            ]);
-                            if(empty($DormitoryMember)){
-                                //出错，报错
-                                session()->flash('danger','出现未知错误，请稍后再试！');
-                                return redirect('/');
-                            }
+//                            $DormitoryMember = Dormitory_member::create([
+//                                'dormitory_id' => $dormitory->id,
+//                                'student_id' => $value['id'],
+//                            ]);
+                            //创建宿舍人员记录
+                            event(new CreateDormitoryMember($dormitory->id,$value['id']));
+//                            if(empty($DormitoryMember)){
+//                                //出错，报错
+//                                session()->flash('danger','出现未知错误，请稍后再试！');
+//                                return redirect('/');
+//                            }
+//                            //更新学生已安排宿舍信息
+//                            Student::whereIn('id',$id)->update([
+//                                'is_arrange' => 1,
+//                            ]);
                             //更新学生已安排宿舍信息
-                            Student::whereIn('id',$id)->update([
-                                'is_arrange' => 1,
-                            ]);
+                            event( new UpdateIsArrange($id));
                         }else{
                             //没有空位
                             //获取宿舍号
@@ -189,10 +195,14 @@ class DormitoryController extends Controller
                                 session()->flash('danger','出现未知错误，请稍后再试！'.$HouseNum.'+'.$building->empty_num);
                                 return redirect()->back();
                             }
+                            //创建学生人员记录
+                            event(new CreateDormitoryMember($dormitory->id,$value['id']));
+//                            //更新学生已安排宿舍信息
+//                            Student::whereIn('id',$id)->update([
+//                                'is_arrange' => 1,
+//                            ]);
                             //更新学生已安排宿舍信息
-                            Student::whereIn('id',$id)->update([
-                                'is_arrange' => 1,
-                            ]);
+                            event( new UpdateIsArrange($id));
                             //重新获取宿舍剩余人数，并设置宿舍楼空余宿舍-1
                             $RemainNume = $dormitory->Remain_number;
                             $empty_num -= 1;
@@ -292,20 +302,24 @@ class DormitoryController extends Controller
                         //宿舍空位减一
                         $RemainNume -= 1;
                         if($RemainNume >= 0){
-                            //有空位
-                            $DormitoryMember = Dormitory_member::create([
-                                'dormitory_id' => $dormitory->id,
-                                'student_id' => $value['id'],
-                            ]);
-                            if(empty($DormitoryMember)){
-                                //出错，报错
-                                session()->flash('danger','出现未知错误，请稍后再试！');
-                                return redirect('/');
-                            }
+//                            //有空位
+//                            $DormitoryMember = Dormitory_member::create([
+//                                'dormitory_id' => $dormitory->id,
+//                                'student_id' => $value['id'],
+//                            ]);
+                            //创建宿舍人员记录
+                            event(new CreateDormitoryMember($dormitory->id,$value['id']));
+//                            if(empty($DormitoryMember)){
+//                                //出错，报错
+//                                session()->flash('danger','出现未知错误，请稍后再试！');
+//                                return redirect('/');
+//                            }
+//                            //更新学生已安排宿舍信息
+//                            Student::whereIn('id',$id)->update([
+//                                'is_arrange' => 1,
+//                            ]);
                             //更新学生已安排宿舍信息
-                            Student::whereIn('id',$id)->update([
-                                'is_arrange' => 1,
-                            ]);
+                            event( new UpdateIsArrange($id));
                         }else{
                             //没有空位
                             //获取宿舍号
@@ -323,10 +337,14 @@ class DormitoryController extends Controller
                                 session()->flash('danger','出现未知错误，请稍后再试！'.$HouseNum.'+'.$building->empty_num);
                                 return redirect()->back();
                             }
+                            //创建宿舍人员记录
+                            event(new CreateDormitoryMember($dormitory->id,$value['id']));
+//                            //更新学生已安排宿舍信息
+//                            Student::whereIn('id',$id)->update([
+//                                'is_arrange' => 1,
+//                            ]);
                             //更新学生已安排宿舍信息
-                            Student::whereIn('id',$id)->update([
-                                'is_arrange' => 1,
-                            ]);
+                            event( new UpdateIsArrange($id));
                             //重新获取宿舍剩余人数，并设置宿舍楼空余宿舍-1
                             $RemainNume = $dormitory->Remain_number;
                             $empty_num -= 1;
