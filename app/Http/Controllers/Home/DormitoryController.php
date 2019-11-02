@@ -135,7 +135,7 @@ class DormitoryController extends Controller
                     if (empty($dormitory)) {
                         //没有匹配到偏好宿舍
                         $dormitory = Dormitory::where('building_id', $building->id)
-                            ->where('preference', 'like', '%'.$CollegeId.'%')
+                            ->where('preference', 'like', $CollegeId.'%')
                             ->where('Remain_number', '>=', 1)
                             ->orderBy('house_num', 'desc')
                             ->first();
@@ -253,7 +253,7 @@ class DormitoryController extends Controller
                     if (empty($dormitory)) {
                         //没有匹配到偏好宿舍
                         $dormitory = Dormitory::where('building_id', $building->id)
-                            ->where('preference', 'like', '%'.$CollegeId.'%')
+                            ->where('preference', 'like', $CollegeId.'%')
                             ->where('Remain_number', '>=', 1)
                             ->orderBy('house_num', 'desc')
                             ->first();

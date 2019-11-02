@@ -4,7 +4,7 @@
     <ul class="breadcrumb">
         <li><a href="{{ Route('/') }}">主页</a></li>
         <li><a href="#">信息查询</a></li>
-        <li class="active">班级学生信息查询</li>
+        <li class="active">专业学生信息查询</li>
     </ul>
 @endsection
 
@@ -14,11 +14,11 @@
         <div class="row">
             <div class="col-md-12" >
 
-                <form class="form-horizontal" action="{{ route('student_class_show') }}" method="post">
+                <form class="form-horizontal" action="{{ route('student_college_show') }}" method="post">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>班级学生信息查询</strong></h3>
+                            <h3 class="panel-title"><strong>专业学生信息查询</strong></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -42,16 +42,6 @@
                                                 <input type="text" name="year" class="form-control"/>
                                             </div>
                                             <span class="help-block">必填！<code>例：16届请填写 2016</code></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">班级</label>
-                                        <div class="col-md-6 col-xs-12">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-building-o"></span></span>
-                                                <input type="text" name="classes" class="form-control"/>
-                                            </div>
-                                            <span class="help-block">必填！只能填写同一专业班级，<code>填写数字即可</code>,多个之间以<code>;</code>（分号）分隔。</span>
                                         </div>
                                     </div>
 

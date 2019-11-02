@@ -74,6 +74,9 @@ Route::post('student/buildingSearch','Home\StudentController@buildingShow')->nam
 //查询_班级学生信息查询
 Route::get('student/classSearch','Home\StudentController@classesSearch')->name('student_class_show');
 Route::post('student/classSearch','Home\StudentController@classesShow')->name('student_class_show');
+//查询_专业学生信息查询
+Route::get('student/collegeSearch','Home\StudentController@collegeSearch')->name('student_college_show');
+Route::post('student/collegeShow','Home\StudentController@collegeShow')->name('student_college_show');
 
 //学生信息导出
 Route::post('/student/export','Home\StudentController@export')->name('student_export');

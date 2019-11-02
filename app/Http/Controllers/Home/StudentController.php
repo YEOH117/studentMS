@@ -372,7 +372,7 @@ class StudentController extends Controller
         $this->validate($request,[
             'area' => 'required',
             'building' => 'required',
-            //'verification' => 'required|captcha',
+            'verification' => 'required|captcha',
         ]);
         //查找大楼
         $building = Building::where('area',$request->area)->where('building',$request->building)->select('id')->first();
@@ -449,13 +449,158 @@ class StudentController extends Controller
         //表单验证
         $this->validate($request,[
             'college' => 'required',
+            'year' => 'required|max:4|min:4',
             'classes' => 'required',
+            //'verification' => 'required|captcha',
         ]);
         //分割班级，第一步先将中文的分号替换成英语的标点
         $classes = str_replace('；',';',$request->classes);
         $classes = explode(";",$classes);
+        //和成学号模糊查询条件
+        $id = substr($request->year,2,2).$request->college;
         //查询班级学生
-        $student = Student::where('the_student_id','like','%1604413%')->where('class',1)->get();
-        dump($student);
+        $student = Student::where('the_student_id','like',$id.'%')->whereIn('class',$classes)->get();
+        if($student->count() <= 0){
+            //报错
+            session()->flash('danger','查无该学年的该专业学生信息！');
+            return redirect()->back();
+        }
+        //获取学生id
+        $studentId = [];
+        foreach ($student as $key => $value){
+            $studentId[$key] = $value->id;
+        }
+        //查询住宿情况
+        $dormitory = Dormitory_member::whereIn('student_id',$studentId)->get();
+        //对象转数组
+        $dormitory = $dormitory->toArray();
+        //获取宿舍id
+        $dormitoryId = [];
+        foreach ($dormitory as $key => $value){
+            $dormitoryId[$key] = $value['dormitory_id'];
+        }
+        //将宿舍id添加到学生信息中
+        foreach ($student as $value){
+            foreach ($dormitory as $key => $v){
+                if($v['student_id'] == $value->id){
+                    $value['dormitory_id'] = $v['dormitory_id'];
+                    array_splice($dormitory,$key,1);
+                }
+            }
+        }
+        //查询宿舍信息
+        $dormitory = Dormitory::whereIn('id',$dormitoryId)->get();
+        //循环获取宿舍楼id
+        $buildingId = [];
+        foreach ($dormitory as $key => $value){
+            $buildingId[$key] = $value->building_id;
+        }
+        //将宿舍号与宿舍楼id添加到学生信息中
+        foreach ($student as $value){
+            foreach ($dormitory as $v){
+                if($v->id == $value['dormitory_id']){
+                    $value['building_id'] = $v->building_id;
+                    $value['house_num'] = $v->house_num;
+                }
+            }
+        }
+        //查询宿舍楼信息
+        $building = Building::whereIn('id',$buildingId)->get();
+        //将宿舍楼信息添加到学生信息中
+        foreach ($student as $value){
+            foreach ($building as $v){
+                if($value['building_id'] == $v->id){
+                    $value['area'] = $v->area;
+                    $value['building'] = $v->building;
+                }
+            }
+        }
+        return view('student.classShow',compact('student'));
+    }
+
+    //学生-专业学生信息查询页
+    public function collegeSearch(){
+        //授权
+        $this->authorize('general',Student::class);
+        //查询专业代码
+        $professionCode = [];
+        $professionCode = Profession_code::all();
+        if(empty($professionCode)){
+            session()->flash('danger','专业代码为空，请先设置专业代码！');
+            return redirect()->back();
+        }
+        return view('student.collegeSearch',compact('professionCode'));
+    }
+
+    //学生-专业学生信息查询逻辑
+    public function collegeShow(Request $request){
+        //授权
+        $this->authorize('general',Student::class);
+        //表单验证
+        $this->validate($request,[
+            'college' => 'required',
+            'year' => 'required|max:4|min:4',
+            //'verification' => 'required|captcha',
+        ]);
+        //和成学号模糊查询条件
+        $id = substr($request->year,2,2).$request->college;
+        //查询班级学生
+        $student = Student::where('the_student_id','like',$id.'%')->get();
+        if($student->count() <= 0){
+            //报错
+            session()->flash('danger','查无该学年的该专业学生信息！');
+            return redirect()->back();
+        }
+        //获取学生id
+        $studentId = [];
+        foreach ($student as $key => $value){
+            $studentId[$key] = $value->id;
+        }
+        //查询住宿情况
+        $dormitory = Dormitory_member::whereIn('student_id',$studentId)->get();
+        //对象转数组
+        $dormitory = $dormitory->toArray();
+        //获取宿舍id
+        $dormitoryId = [];
+        foreach ($dormitory as $key => $value){
+            $dormitoryId[$key] = $value['dormitory_id'];
+        }
+        //将宿舍id添加到学生信息中
+        foreach ($student as $value){
+            foreach ($dormitory as $key => $v){
+                if($v['student_id'] == $value->id){
+                    $value['dormitory_id'] = $v['dormitory_id'];
+                    array_splice($dormitory,$key,1);
+                }
+            }
+        }
+        //查询宿舍信息
+        $dormitory = Dormitory::whereIn('id',$dormitoryId)->get();
+        //循环获取宿舍楼id
+        $buildingId = [];
+        foreach ($dormitory as $key => $value){
+            $buildingId[$key] = $value->building_id;
+        }
+        //将宿舍号与宿舍楼id添加到学生信息中
+        foreach ($student as $value){
+            foreach ($dormitory as $v){
+                if($v->id == $value['dormitory_id']){
+                    $value['building_id'] = $v->building_id;
+                    $value['house_num'] = $v->house_num;
+                }
+            }
+        }
+        //查询宿舍楼信息
+        $building = Building::whereIn('id',$buildingId)->get();
+        //将宿舍楼信息添加到学生信息中
+        foreach ($student as $value){
+            foreach ($building as $v){
+                if($value['building_id'] == $v->id){
+                    $value['area'] = $v->area;
+                    $value['building'] = $v->building;
+                }
+            }
+        }
+        return view('student.collegeShow',compact('student'));
     }
 }

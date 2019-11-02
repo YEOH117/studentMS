@@ -61,7 +61,7 @@
                 @if(Auth::user()->grade >= 2)
                     <li><a href="{{ route('student_building_show') }}"><span class="fa fa-users"></span> 宿舍楼学生信息查询</a></li>
                     <li><a href="{{ route('student_class_show') }}"><span class="fa fa-users"></span> 班级学生信息查询</a></li>
-                    <li><a href="{{ route('student_dormitory_show') }}"><span class="fa fa-users"></span> 学院学生信息查询</a></li>
+                    <li><a href="/student/collegeSearch"><span class="fa fa-users"></span> 专业学生信息查询</a></li>
                 @endif
                 </ul>
             </li>
