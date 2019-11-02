@@ -20,9 +20,9 @@ class BatchEntry
      *
      * @return void
      */
-    public function __construct($collection)
+    public function __construct($student)
     {
-        $this->info = $collection;
+        $this->info = $student;
     }
 
     /**

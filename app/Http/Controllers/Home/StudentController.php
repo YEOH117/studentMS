@@ -135,13 +135,94 @@ class StudentController extends Controller
         $excel = Importer::make('Excel');
         $excel->load($path);
         $collection = $excel->getCollection();
+        //找到学号、姓名、性别、邮箱、手机在哪列
+        foreach($collection[0] as $key => $info){
+            if($info == "学号"){
+                $student_id_num = $key;
+            }
+            if($info == "姓名"){
+                $name_num = $key;
+            }
+            if($info == "性别"){
+                $sex_num = $key;
+            }
+        }
+        //遍历获取需要的数据
+        $student = [];
+        $i = 0;
+        foreach($collection as $key => $value){
+            if($key == 0){
+                continue;
+            }
+            //上传的文件数据可能会出的错误,处理-跳过
+            //1.学号为空
+            if(empty($value[$student_id_num])){
+                continue;
+            }
+            //2.名字为空
+            if(empty($value[$name_num])){
+                continue;
+            }
+            //3.性别为空
+            if(empty($value[$sex_num])){
+                continue;
+            }
+            //4.学号长度不为10位
+            if(strlen($value[$student_id_num]) != 10){
+                continue;
+            }
+            $student[$i]['the_student_id']= $value[$student_id_num];
+            $student[$i]['name']= $value[$name_num];
+            $student[$i]['sex']= $value[$sex_num];
+            ++$i;
+        }
+        if(empty($student)){
+            //读取文件失败，报错
+            session()->flash('danger',"文件为空，或者文件内容不规范！请按照格式填写。");
+            return redirect()->back();
+        }
+        //获取专业代码数据
+        $colleges = Profession_code::all();
+        //查询所有的student表中的学号
+        $student_id = Student::get()->pluck('the_student_id');
+        //删除所有重复元素
+        foreach ($student_id as $num){
+            foreach($student as $key => $value){
+                if($value['the_student_id'] == $num){
+                    array_splice($student,$key,1);
+                }
+            }
+        }
+        //完善学生信息
+        foreach($student as $key => $value) {
+            //遍历专业代码，找出学生对应专业与学院
+            $code = substr($value['the_student_id'], 2, 5);
+            $class = substr($value['the_student_id'], 7, 1);
+            foreach ($colleges as $info) {
+                if ($code == $info['code']) {
+                    $student[$key]['profession'] = $info['profession'];
+                    $student[$key]['college'] = $info['college'];
+                    $student[$key]['class'] = $class;
+                    break;
+                }
+            }
+            //如果找不到，报错
+            if (empty($student[$key]['profession']) || empty($student[$key]['college'])) {
+                //插入失败，报错
+                session()->flash('danger', "姓名为：" . $value['name'] . ",学号为：" . $value['the_student_id'] . "的学生匹配学院出错！请检查该学生的学号是否正确");
+                return redirect()->back();
+            }
+        }
+        //分块执行
+        $student = collect($student);
+        $info = $student->chunk(100);
+        foreach ($info as $key => $value){
+            //触发事件
+            event(new BatchEntry($value));
+        }
 
-        //触发事件
-        event(new BatchEntry($collection));
-
-        //过渡页
-        session()->flash('success','导入成功！');
-        return redirect('/');
+        session()->flash('success','成功提交录入，后台将会在5分钟内录入完毕！');
+        return redirect()->back();
     }
 
     //学生-查询信息页
