@@ -4,7 +4,7 @@
     <ul class="breadcrumb">
         <li><a href="{{ Route('/') }}">主页</a></li>
         <li><a href="#">信息查询</a></li>
-        <li class="active">大楼学生信息详情页</li>
+        <li class="active">宿舍楼学生信息详情页</li>
     </ul>
 @endsection
 

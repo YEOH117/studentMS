@@ -68,13 +68,14 @@ Route::post('/student/search','Home\StudentController@show')->name('student_show
 //查询_宿舍学生信息查询
 Route::get('student/dormitorySearch','Home\StudentController@dormitorySearch')->name('student_dormitory_show');
 Route::post('student/dormitorySearch','Home\StudentController@dormitoryShow')->name('student_dormitory_show');
-//查询_大楼学生信息查询
+//查询_宿舍楼学生信息查询
 Route::get('student/buildingSearch','Home\StudentController@buildingSearch')->name('student_building_show');
 Route::post('student/buildingSearch','Home\StudentController@buildingShow')->name('student_building_show');
+//查询_班级学生信息查询
+Route::get('student/classSearch','Home\StudentController@classesSearch')->name('student_class_show');
+Route::post('student/classSearch','Home\StudentController@classesShow')->name('student_class_show');
 
 //学生信息导出
 Route::post('/student/export','Home\StudentController@export')->name('student_export');
 
-Route::get('/text',function (){
-   return view('Ellipsis.ellipsis');
-});
+

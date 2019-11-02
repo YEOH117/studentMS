@@ -427,4 +427,35 @@ class StudentController extends Controller
         $building = $request->building;
         return view('student.buildingShow',compact('student','area','building'));
     }
+
+    //学生-班级学生信息查询页
+    public function classesSearch(){
+        //授权
+        $this->authorize('general',Student::class);
+        //查询专业代码
+        $professionCode = [];
+        $professionCode = Profession_code::all();
+        if(empty($professionCode)){
+            session()->flash('danger','专业代码为空，请先设置专业代码！');
+            return redirect()->back();
+        }
+        return view('student.classSearch',compact('professionCode'));
+    }
+
+    //学生-班级学生信息查询逻辑
+    public function classesShow(Request $request){
+        //授权
+        $this->authorize('general',Student::class);
+        //表单验证
+        $this->validate($request,[
+            'college' => 'required',
+            'classes' => 'required',
+        ]);
+        //分割班级，第一步先将中文的分号替换成英语的标点
+        $classes = str_replace('；',';',$request->classes);
+        $classes = explode(";",$classes);
+        //查询班级学生
+        $student = Student::where('the_student_id','like','%1604413%')->where('class',1)->get();
+        dump($student);
+    }
 }

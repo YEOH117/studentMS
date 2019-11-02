@@ -81,7 +81,7 @@ class DormitoryController extends Controller
             //男学生不为空
             if (!empty($MaleStudent)) {
                 //查找偏好男宿舍楼
-                $building = Building::where('preference', 'like', $CollegeId)
+                $building = Building::where('preference', 'like', '%'.$CollegeId.'%')
                     ->where('sex', 0)
                     ->where('empty_num', '>=', $MaleStudent->count() / 8)
                     ->orderBy('empty_num', 'desc')
@@ -135,7 +135,7 @@ class DormitoryController extends Controller
                     if (empty($dormitory)) {
                         //没有匹配到偏好宿舍
                         $dormitory = Dormitory::where('building_id', $building->id)
-                            ->where('preference', 'like', '%' . $CollegeId)
+                            ->where('preference', 'like', '%'.$CollegeId.'%')
                             ->where('Remain_number', '>=', 1)
                             ->orderBy('house_num', 'desc')
                             ->first();
@@ -199,7 +199,7 @@ class DormitoryController extends Controller
             //女学生不为空
             if (!empty($FemaleStudent)) {
                 //查找偏好男宿舍楼
-                $building = Building::where('preference', 'like', $CollegeId)
+                $building = Building::where('preference', 'like', '%'.$CollegeId.'%')
                     ->where('sex', 1)
                     ->where('empty_num', '>=', $FemaleStudent->count() / 8)
                     ->orderBy('empty_num', 'desc')
@@ -253,7 +253,7 @@ class DormitoryController extends Controller
                     if (empty($dormitory)) {
                         //没有匹配到偏好宿舍
                         $dormitory = Dormitory::where('building_id', $building->id)
-                            ->where('preference', 'like', '%' . $CollegeId)
+                            ->where('preference', 'like', '%'.$CollegeId.'%')
                             ->where('Remain_number', '>=', 1)
                             ->orderBy('house_num', 'desc')
                             ->first();

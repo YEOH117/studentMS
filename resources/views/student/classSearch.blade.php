@@ -4,7 +4,7 @@
     <ul class="breadcrumb">
         <li><a href="{{ Route('/') }}">主页</a></li>
         <li><a href="#">信息查询</a></li>
-        <li class="active">大楼学生信息查询</li>
+        <li class="active">班级学生信息查询</li>
     </ul>
 @endsection
 
@@ -14,33 +14,34 @@
         <div class="row">
             <div class="col-md-12" >
 
-                <form class="form-horizontal" action="{{ route('student_building_show') }}" method="post">
+                <form class="form-horizontal" action="{{ route('student_class_show') }}" method="post">
                     {{ csrf_field() }}
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h3 class="panel-title"><strong>大楼学生信息查询</strong></h3>
+                            <h3 class="panel-title"><strong>班级学生信息查询</strong></h3>
                         </div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-md-6 col-md-offset-3">
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">区域</label>
+                                        <label class="col-md-3 col-xs-12 control-label">专业</label>
                                         <div class="col-md-6 col-xs-12">
-                                            <select  class="form-control" name="area">
-                                                <option value="0">东区</option>
-                                                <option value="1">西区</option>
+                                            <select  class="form-control" name="college">
+                                                @foreach($professionCode as $value)
+                                                    <option value="{{ $value->code }}">{{ $value->profession }}</option>
+                                                @endforeach
                                             </select>
                                             <span class="help-block">必选！</span>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">宿舍楼</label>
+                                        <label class="col-md-3 col-xs-12 control-label">班级</label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-building-o"></span></span>
-                                                <input type="text" name="building" class="form-control"/>
+                                                <input type="text" name="classes" class="form-control"/>
                                             </div>
-                                            <span class="help-block">必填！只能填写一座大楼，<code>填写数字即可</code></span>
+                                            <span class="help-block">必填！只能填写同一专业班级，<code>填写数字即可</code>,多个之间以<code>;</code>（分号）分隔。</span>
                                         </div>
                                     </div>
 
