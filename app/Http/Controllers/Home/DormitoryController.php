@@ -114,7 +114,7 @@ class DormitoryController extends Controller
                         if ($ClassId == $FirstCollegeId) {
                             //挑学生
                             $SameClassStudents->push($MaleStudent[$i]);
-                            //删除$student中该元素
+                            //删除$MaleStudent中该元素
                             array_splice($MaleStudent, $i, 1);
                             $i -= 1;
                         }
@@ -147,8 +147,14 @@ class DormitoryController extends Controller
                     }
                     //获取宿舍剩余空位
                     $RemainNume = $dormitory->Remain_number;
+                    //已安排学生id
+                    $id = [];
+                    $i = 0;
                     //创建宿舍人员记录
                     foreach ($SameClassStudents as $value){
+                        //获取学生id
+                        $id[$i] = $value['id'];
+                        ++$i;
                         //宿舍空位减一
                         $RemainNume -= 1;
                         if($RemainNume >= 0){
@@ -162,6 +168,10 @@ class DormitoryController extends Controller
                                 session()->flash('danger','出现未知错误，请稍后再试！');
                                 return redirect('/');
                             }
+                            //更新学生已安排宿舍信息
+                            Student::whereIn('id',$id)->update([
+                                'is_arrange' => 1,
+                            ]);
                         }else{
                             //没有空位
                             //获取宿舍号
@@ -179,6 +189,11 @@ class DormitoryController extends Controller
                                 session()->flash('danger','出现未知错误，请稍后再试！'.$HouseNum.'+'.$building->empty_num);
                                 return redirect()->back();
                             }
+                            //更新学生已安排宿舍信息
+                            Student::whereIn('id',$id)->update([
+                                'is_arrange' => 1,
+                            ]);
+                            //重新获取宿舍剩余人数，并设置宿舍楼空余宿舍-1
                             $RemainNume = $dormitory->Remain_number;
                             $empty_num -= 1;
                         }
@@ -190,6 +205,7 @@ class DormitoryController extends Controller
                     //更新宿舍楼剩余空宿舍
                     $building->empty_num = $empty_num;
                     $building->save();
+
                 }
             }
             //女学生不为空
@@ -231,7 +247,7 @@ class DormitoryController extends Controller
                         if ($ClassId == $FirstCollegeId) {
                             //挑学生
                             $SameClassStudents->push($FemaleStudent[$i]);
-                            //删除$student中该元素
+                            //删除$FemaleStudent中该元素
                             array_splice($FemaleStudent, $i, 1);
                             $i -= 1;
                         }
@@ -265,8 +281,14 @@ class DormitoryController extends Controller
                     }
                     //获取宿舍剩余空位
                     $RemainNume = $dormitory->Remain_number;
+                    //已安排学生id
+                    $id = [];
+                    $i = 0;
                     //创建宿舍人员记录
                     foreach ($SameClassStudents as $value){
+                        //获取学生id
+                        $id[$i] = $value['id'];
+                        ++$i;
                         //宿舍空位减一
                         $RemainNume -= 1;
                         if($RemainNume >= 0){
@@ -280,6 +302,10 @@ class DormitoryController extends Controller
                                 session()->flash('danger','出现未知错误，请稍后再试！');
                                 return redirect('/');
                             }
+                            //更新学生已安排宿舍信息
+                            Student::whereIn('id',$id)->update([
+                                'is_arrange' => 1,
+                            ]);
                         }else{
                             //没有空位
                             //获取宿舍号
@@ -297,6 +323,11 @@ class DormitoryController extends Controller
                                 session()->flash('danger','出现未知错误，请稍后再试！'.$HouseNum.'+'.$building->empty_num);
                                 return redirect()->back();
                             }
+                            //更新学生已安排宿舍信息
+                            Student::whereIn('id',$id)->update([
+                                'is_arrange' => 1,
+                            ]);
+                            //重新获取宿舍剩余人数，并设置宿舍楼空余宿舍-1
                             $RemainNume = $dormitory->Remain_number;
                             $empty_num -= 1;
                         }
@@ -312,8 +343,8 @@ class DormitoryController extends Controller
             }
 
         }
-
-
+        session()->flash('success','提交智能排宿成功，系统将在后台自动智能排宿，请根据安排人数等待3~10分钟！');
+        return redirect('/');
     }
 
 }
