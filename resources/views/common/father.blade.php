@@ -176,7 +176,7 @@
                         @endforeach
                     </div>
                     <div class="panel-footer text-center">
-                        <a href="pages-messages.html">显示全部通知</a>
+                        <a href="{{ route('notification_list') }}">显示全部通知</a>
                     </div>
                 </div>
             </li>

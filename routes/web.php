@@ -66,19 +66,19 @@ Route::post('/Student/Sort','Home\DormitoryController@sort')->name('student_sort
 Route::get('/student/search','Home\StudentController@search')->name('student_show');
 Route::post('/student/search','Home\StudentController@show')->name('student_show');
 //查询_宿舍学生信息查询
-Route::get('student/dormitorySearch','Home\StudentController@dormitorySearch')->name('student_dormitory_show');
-Route::post('student/dormitorySearch','Home\StudentController@dormitoryShow')->name('student_dormitory_show');
+Route::get('/student/dormitorySearch','Home\StudentController@dormitorySearch')->name('student_dormitory_show');
+Route::post('/student/dormitorySearch','Home\StudentController@dormitoryShow')->name('student_dormitory_show');
 //查询_宿舍楼学生信息查询
-Route::get('student/buildingSearch','Home\StudentController@buildingSearch')->name('student_building_show');
-Route::post('student/buildingSearch','Home\StudentController@buildingShow')->name('student_building_show');
+Route::get('/student/buildingSearch','Home\StudentController@buildingSearch')->name('student_building_show');
+Route::post('/student/buildingSearch','Home\StudentController@buildingShow')->name('student_building_show');
 //查询_班级学生信息查询
-Route::get('student/classSearch','Home\StudentController@classesSearch')->name('student_class_show');
-Route::post('student/classSearch','Home\StudentController@classesShow')->name('student_class_show');
+Route::get('/student/classSearch','Home\StudentController@classesSearch')->name('student_class_show');
+Route::post('/student/classSearch','Home\StudentController@classesShow')->name('student_class_show');
 //查询_专业学生信息查询
-Route::get('student/collegeSearch','Home\StudentController@collegeSearch')->name('student_college_show');
-Route::post('student/collegeShow','Home\StudentController@collegeShow')->name('student_college_show');
+Route::get('/student/collegeSearch','Home\StudentController@collegeSearch')->name('student_college_show');
+Route::post('/student/collegeShow','Home\StudentController@collegeShow')->name('student_college_show');
 //查询_ajax请求学生信息
-Route::get('ajax/{student}','Home\StudentController@ajaxInquire');
+Route::get('/ajax/{student}','Home\StudentController@ajaxInquire');
 
 //学生信息导出
 Route::post('/student/export','Home\StudentController@export')->name('student_export');
@@ -87,5 +87,10 @@ Route::post('/student/export','Home\StudentController@export')->name('student_ex
 Route::get('/dormitory/adjustApplication','Home\AdjustApplicationController@index')->name('adjust_application');
 //调宿_学生申请调宿逻辑
 Route::get('/dormitory/adjustApplication/{id}','Home\AdjustApplicationController@store');
+
+//通知页
+Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');
+//查看通知
+Route::get('/notification/{id}','Home\NotificationController@show')->name('notification_show');
 
 
