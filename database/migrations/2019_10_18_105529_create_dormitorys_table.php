@@ -23,8 +23,6 @@ class CreateDormitorysTable extends Migration
             $table->tinyInteger('num')->notnull();
             $table->string('preference',200)->default('');
             $table->index('preference');
-            $table->string('last_preference',200)->default('');
-            $table->index('last_preference');
             $table->tinyInteger('roon_people')->default(6);
             $table->tinyInteger('Remain_number')->default(6);
             $table->index('Remain_number');

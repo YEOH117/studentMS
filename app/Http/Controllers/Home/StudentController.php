@@ -451,7 +451,7 @@ class StudentController extends Controller
             'college' => 'required',
             'year' => 'required|max:4|min:4',
             'classes' => 'required',
-            //'verification' => 'required|captcha',
+            'verification' => 'required|captcha',
         ]);
         //分割班级，第一步先将中文的分号替换成英语的标点
         $classes = str_replace('；',';',$request->classes);
@@ -459,7 +459,7 @@ class StudentController extends Controller
         //和成学号模糊查询条件
         $id = substr($request->year,2,2).$request->college;
         //查询班级学生
-        $student = Student::where('the_student_id','like',$id.'%')->whereIn('class',$classes)->get();
+        $student = Student::where('the_student_id','like',$id.'%')->whereIn('class',$classes)->where('is_arrange',1)->get();
         if($student->count() <= 0){
             //报错
             session()->flash('danger','查无该学年的该专业学生信息！');
@@ -540,12 +540,12 @@ class StudentController extends Controller
         $this->validate($request,[
             'college' => 'required',
             'year' => 'required|max:4|min:4',
-            //'verification' => 'required|captcha',
+            'verification' => 'required|captcha',
         ]);
         //和成学号模糊查询条件
         $id = substr($request->year,2,2).$request->college;
         //查询班级学生
-        $student = Student::where('the_student_id','like',$id.'%')->get();
+        $student = Student::where('the_student_id','like',$id.'%')->where('is_arrange',1)->get();
         if($student->count() <= 0){
             //报错
             session()->flash('danger','查无该学年的该专业学生信息！');
@@ -602,5 +602,64 @@ class StudentController extends Controller
             }
         }
         return view('student.collegeShow',compact('student'));
+    }
+
+    //学生-ajax请求学生信息
+    public function ajaxInquire($studentId){
+        //学号长度错误
+        if(mb_strlen($studentId) <= 9 || mb_strlen($studentId) >= 11 ){
+            $info = json_encode('输入的学号长度有误，请检测你的输入！');
+            return $info;
+        }
+        //查询用户本身，错误
+        if(\Auth::user()->account == $studentId){
+            $info = json_encode('错误，你不能跟自身调宿！');
+            return $info;
+        }
+        //查询用户住宿信息
+        $info = Student::where('the_student_id',$studentId)->first();
+        if(empty($info)){
+            //查不到用户信息
+            $info = json_encode('查找不到该学生，请检测你的输入！');
+            return $info;
+        }
+        //查询宿舍id
+        $domitoryId = Dormitory_member::where('student_id',$info->id)->first();
+        if(empty($domitoryId)){
+            //用户未安排住宿
+            $info = json_encode('该学生尚未被安排住宿！');
+            return $info;
+        }
+        //查询宿舍信息
+        $dormitory = Dormitory::where('id',$domitoryId->dormitory_id)->first();
+        if(empty($dormitory)){
+            //宿舍信息不存在
+            $info = json_encode('发生未知错误！');
+            return $info;
+        }
+        //查询宿舍楼信息
+        $building = Building::where('id',$dormitory->building_id)->first();
+        if(empty($building)){
+            //宿舍楼信息不存在
+            $info = json_encode('发生未知错误！');
+            return $info;
+        }
+        //拼接前端代码
+        $code = '';
+        $code = '<p>姓名：<code>'.$info->name.'</code></p>';
+        $code .= '<p>学院：<code>'.$info->college.'</code></p>';
+        $code .= ' <p>专业：<code>'.$info->profession.'</code></p>';
+        $code .= ' <p>班级：<code>'.$info->class.'班</code></p>';
+        $code .= ' <p>联系邮箱：<code>'.$info->email.'</code></p>';
+        $code .= '<p>联系手机号：<code>'.$info->phone.'</code></p>';
+        if($building->area >= 1){
+            $area = '西';
+        }else{
+            $area = '东';
+        }
+        $code .= '<p>所在宿舍：<code>'.$area.$building->building.'栋'.$dormitory->house_num.'宿舍';
+        //返回
+        $info = json_encode($code);
+        return $info;
     }
 }

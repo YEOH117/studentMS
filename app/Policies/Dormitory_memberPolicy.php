@@ -12,4 +12,8 @@ class Dormitory_memberPolicy
     public function general(User $user){
         return $user->grade >= 2;
     }
+
+    public function adjustApplication(User $user){
+        return $user->grade <= 1;
+    }
 }

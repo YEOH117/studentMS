@@ -77,8 +77,15 @@ Route::post('student/classSearch','Home\StudentController@classesShow')->name('s
 //查询_专业学生信息查询
 Route::get('student/collegeSearch','Home\StudentController@collegeSearch')->name('student_college_show');
 Route::post('student/collegeShow','Home\StudentController@collegeShow')->name('student_college_show');
+//查询_ajax请求学生信息
+Route::get('ajax/{student}','Home\StudentController@ajaxInquire');
 
 //学生信息导出
 Route::post('/student/export','Home\StudentController@export')->name('student_export');
+
+//调宿_学生申请调宿页
+Route::get('/dormitory/adjustApplication','Home\AdjustApplicationController@index')->name('adjust_application');
+//调宿_学生申请调宿逻辑
+Route::get('/dormitory/adjustApplication/{id}','Home\AdjustApplicationController@store');
 
 
