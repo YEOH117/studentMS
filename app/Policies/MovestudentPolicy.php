@@ -13,4 +13,8 @@ class MovestudentPolicy
     public function general(User $user,Movestudent $movestudent){
         return $user->id == $movestudent->target_id ;
     }
+
+    public function look(User $user){
+        return $user->grade >= 2;
+    }
 }

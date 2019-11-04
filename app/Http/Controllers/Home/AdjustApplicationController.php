@@ -134,6 +134,7 @@ class AdjustApplicationController extends Controller
                 //查找用户与目标用户住宿信息
             $targetId = User::where('id',$movestudent->target_id)->first();
             $userId = User::where('id',$movestudent->user_id)->first();
+            $user = $userId;
             if(empty($targetId) || empty($userId)){
                 session()->flash('danger','出现未知错误，请稍后再试！');
                 return redirect('/');
@@ -180,9 +181,14 @@ class AdjustApplicationController extends Controller
             $info = '';
             $info .= $userId->name.'（所在宿舍：<code>'.$userArea.$userBuilding->building.'栋'.$userBuildingId->house_num.'宿舍'.'</code>）';
             $info .= '申请与'.$targetId->name.'（所在宿舍：<code>'.$targetArea.$targetBuilding->building.'栋'.$targetBuildingId->house_num.'宿舍'.'</code>）';
-            $info .= '进行宿舍调换，是否同意？';
+            $info .= '进行宿舍调换，是否同意？点击下面链接进行操作：<a href="/dormitory/adjust/'.$movestudent->user_id.'/'.$movestudent->target_id.'/';
+            $info .= $token.'">'.route('adjust_show',[$movestudent->user_id,$movestudent->target_id,$token]).'</a>';
             //调用 发送管理员事件
             event(new NotificationToAdmins($title,$info,$admin));
+            //发送给申请者通知
+            $title = '你的调宿申请有进展了';
+            $info = Auth::user()->name.'同意了你的调宿申请，等待宿舍管理员审核。';
+            event(new NotificationToStudents($user,$title,$info));
         }else{
             $title = '你的调宿申请结果';
             $info = Auth::user()->name.'拒绝了你的调宿申请，调宿失败。';
@@ -200,5 +206,170 @@ class AdjustApplicationController extends Controller
         //返回
         session()->flash('success','操作成功！');
         return redirect('/');
+    }
+
+    //宿舍申请列表
+    public function list(){
+        //授权
+        $this->authorize('look',Movestudent::class);
+        //查看申请表中，进度为管理员处理的记录
+        $moveStudent = Movestudent::where('state','对方同学已同意，等待管理员处理。')->get();
+        foreach ($moveStudent as $key => $value){
+            $targetId[$key] = $value->target_id;
+            $user_id[$key] = $value->user_id;
+        }
+        if($moveStudent->count()){
+            $target = User::whereIn('id',$targetId)->get();
+            $user = User::whereIn('id',$user_id)->get();
+            foreach ($moveStudent as $value){
+                foreach($target as $t){
+                    if($value->target_id == $t->id){
+                        $value['targetName'] = $t->name;
+                    }
+                }
+                foreach($user as $t){
+                    if($value->user_id == $t->id){
+                        $value['userName'] = $t->name;
+                    }
+                }
+            }
+        }else{
+            $moveStudent= [];
+        }
+
+        return view('admin.adjust.application.list',compact('moveStudent'));
+    }
+
+    //宿舍申请 处理页
+    public function show($userId,$targetId,$token){
+        //授权
+        $this->authorize('look',Movestudent::class);
+        //查询申请记录
+        $moveStudent = Movestudent::where('user_id',$userId)->where('target_id',$targetId)->first();
+        if(empty($moveStudent)){
+            session()->flash('danger','来晚了，申请已经被其他人处理了！');
+            return redirect(route('adjust_list'));
+        }
+        //token对比
+        if($token != $moveStudent->token){
+            session()->flash('danger','请求错误！');
+            return redirect('/');
+        }
+        //查询申请人与被申请人的用户信息
+        $user = User::find($userId);
+        $target = User::find($targetId);
+        if(empty($user) || empty($target)){
+            session()->flash('danger','发生未知错误，请稍后再试！');
+            return redirect('/');
+        }
+        //查询学生信息
+        $user = Student::where('the_student_id',$user->account)->first();
+        $target = Student::where('the_student_id',$target->account)->first();
+        if(empty($user) || empty($target)){
+            session()->flash('danger','发生未知错误，请稍后再试！');
+            return redirect('/');
+        }
+        //查询学生住宿
+        $userDormitoryId = Dormitory_member::where('student_id',$user->id)->first();
+        $targetDormitoryId = Dormitory_member::where('student_id',$target->id)->first();
+        if(empty($userDormitoryId) || empty($targetDormitoryId)){
+            session()->flash('danger','发生未知错误，请稍后再试！');
+            return redirect('/');
+        }
+        //查询学生宿舍id
+        $userDormitory = Dormitory::where('id',$userDormitoryId->dormitory_id)->first();
+        $targetDormitory = Dormitory::where('id',$targetDormitoryId->dormitory_id)->first();
+        if(empty($userDormitory) || empty($targetDormitory)){
+            session()->flash('danger','发生未知错误，请稍后再试！');
+            return redirect('/');
+        }
+        //查询学生宿舍楼id
+        $userBuilding = Building::where('id',$userDormitory->building_id)->first();
+        $targetBuilding = Building::where('id',$targetDormitory->building_id)->first();
+        if(empty($userBuilding) || empty($targetBuilding)){
+            session()->flash('danger','发生未知错误，请稍后再试！');
+            return redirect('/');
+        }
+        //组合信息
+        $userInfo['name'] = $user->name;
+        $userInfo['studentId'] = $user->the_student_id;
+        $userInfo['sex'] = $user->sex;
+        $userInfo['profession'] = $user->profession;
+        $userInfo['college'] = $user->college;
+        $userInfo['email'] = $user->email;
+        $userInfo['phone'] = $user->phone;
+        $userInfo['class'] = $user->class;
+        $userInfo['houseNum'] = $userDormitory->house_num;
+        $userInfo['area'] = $userBuilding->area;
+        $userInfo['building'] = $userBuilding->building;
+        //目标用户信息
+        $targetInfo['name'] = $target->name;
+        $targetInfo['studentId'] = $target->the_student_id;
+        $targetInfo['sex'] = $target->sex;
+        $targetInfo['profession'] = $target->profession;
+        $targetInfo['college'] = $target->college;
+        $targetInfo['email'] = $target->email;
+        $targetInfo['phone'] = $target->phone;
+        $targetInfo['class'] = $target->class;
+        $targetInfo['houseNum'] = $targetDormitory->house_num;
+        $targetInfo['area'] = $targetBuilding->area;
+        $targetInfo['building'] = $targetBuilding->building;
+        return view('admin.adjust.application.show',compact('userInfo','targetInfo','moveStudent','token'));
+    }
+
+    //管理员处理申请
+    public function process(Movestudent $movestudent,$token,$judge){
+        //授权
+        $this->authorize('look',$movestudent);
+        //查看token是否一致
+        if($token != $movestudent->token){
+            session()->flash('danger','你没有权限做此操作！');
+            return redirect('/');
+        }
+        //获取学生
+        $user = User::find($movestudent->user_id);
+        $target = User::find($movestudent->target_id);
+        if($judge){
+            //进行宿舍调整
+            $userStudent = Student::where('the_student_id',$user->account)->first();
+            $targetStudent = Student::where('the_student_id',$target->account)->first();
+            if(empty($userStudent) || empty($targetStudent)){
+                session()->flash('danger','出现未知错误！请稍后再试。');
+                return redirect('/');
+            }
+            //查找住宿情况
+            $userDormitory = Dormitory_member::where('student_id',$userStudent->id)->first();
+            $targetDormitory = Dormitory_member::where('student_id',$targetStudent->id)->first();
+            if(empty($userStudent) || empty($targetStudent)){
+                session()->flash('danger','出现未知错误！请稍后再试。');
+                return redirect('/');
+            }
+            //进行调整
+            $userDormitory->student_id = $targetStudent->id;
+            $userDormitory->save();
+            $targetDormitory->student_id = $userStudent->id;
+            $targetDormitory->save();
+            //通知信息
+            $title = '调宿申请结果通知';
+            $content = '你发出的 与'.$target->name.'调换宿舍 的申请已经被宿舍管理员通过，即日进行宿舍调整！';
+            $content2 = '你与'.$user->name.'调换宿舍 的申请已经被宿舍管理员通过，即日进行宿舍调整！';
+            //触发事件 通知学生
+            event(new NotificationToStudents($user,$title,$content));
+            event(new NotificationToStudents($target,$title,$content2));
+            //删除调宿申请记录
+            $movestudent->delete();
+        }else{
+            //通知信息
+            $title = '调宿申请结果通知';
+            $content = '你发出的 与'.$target->name.'调换宿舍 的申请,被宿舍管理员拒绝！';
+            $content2 = '你与'.$user->name.'调换宿舍 的申请被宿舍管理员拒绝！！';
+            //触发事件 通知学生
+            event(new NotificationToStudents($user,$title,$content));
+            event(new NotificationToStudents($target,$title,$content2));
+            //删除调宿申请记录
+            $movestudent->delete();
+        }
+        session()->flash('success','操作成功！');
+        return redirect(route('adjust_list'));
     }
 }
