@@ -21,11 +21,11 @@ class NotificationToAdmins
      *
      * @return void
      */
-    public function __construct($title,$content,$user)
+    public function __construct($title,$content,$admin)
     {
         $this->title = $title;
         $this->content = $content;
-        $this->admin = $user;
+        $this->admin = $admin;
     }
 
     /**

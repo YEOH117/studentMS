@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\NotificationToAdmins;
+use App\Notifications\NotificationToAdmin;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -28,7 +29,7 @@ class NotificationToAdminsListener implements ShouldQueue
     {
         foreach ($event->admin as $user){
             //发送通知
-            $user->notify(new NotificationToAdmins($event->title,$event->content));
+            $user->notify(new NotificationToAdmin($event->title,$event->content));
         }
     }
 }

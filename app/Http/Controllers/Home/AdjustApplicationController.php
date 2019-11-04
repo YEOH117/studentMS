@@ -19,7 +19,7 @@ class AdjustApplicationController extends Controller
     //申请调宿页
     public function index(){
         //授权,只有学生才能访问
-        //$this->authorize('adjustApplication',Dormitory_member::class);
+        $this->authorize('adjustApplication',Dormitory_member::class);
         //查询用户住宿信息
         $info = Student::where('the_student_id',\Auth::user()->account)->first();
         if(empty($info)){
@@ -54,7 +54,7 @@ class AdjustApplicationController extends Controller
     //申请调宿逻辑
     public function store($studentId){
         //授权
-        //$this->authorize('adjustApplication',Dormitory_member::class);
+        $this->authorize('adjustApplication',Dormitory_member::class);
         //不能与自身进行调宿
         $user = \Auth::user();
         if($user->account == $studentId){

@@ -40,7 +40,7 @@
                                     var hre = "#";
                                     function search(){
                                         var studentId = $('#studentId').val();
-                                        $('#student').html('<p><label>我的信息</label></p>');
+                                        $('#student').html('<p><label>目标同学信息</label></p>');
                                         $.get("/ajax/"+studentId,function(data){
                                             var info = JSON.parse(data);
                                             $('#student').append(info);

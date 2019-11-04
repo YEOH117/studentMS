@@ -37,8 +37,10 @@
                 </div>
             @endforeach
             </div>
-            <div class="panel-footer">
-                {{ $notification->links() }}
+            <div class="panel-footer" >
+                <div class="col-md-12" style="text-align: center;">
+                    {{ $notification->links() }}
+                </div>
             </div>
         </div>
 

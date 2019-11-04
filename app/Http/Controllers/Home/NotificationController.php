@@ -19,7 +19,7 @@ class NotificationController extends Controller
         //获取当前用户id
         $userId = Auth::user()->id;
         //查询用户的通知
-        $notification = DB::table('notifications')->where('notifiable_id',$userId)->paginate(6);
+        $notification = DB::table('notifications')->where('notifiable_id',$userId)->orderBy('created_at','desc')->paginate(6);
         //实例化Carbon
         $dt = Carbon::now();
         foreach ($notification as $value){
