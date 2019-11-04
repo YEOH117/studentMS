@@ -37,10 +37,14 @@ class NotificationController extends Controller
         $this->authorize('look',$notification);
         //实例化Carbon
         $dt = Carbon::now();
+        //标记为已读
+        $notification->read_at = $dt;
+        $notification->save();
         //时间格式化为Carbon
         $time = carbon::parse($notification->created_at);
-
+        //解码json
         $notification->data = json_decode($notification->data);
+        //获取时间差
         $time = $time->diffForHumans($dt);
         $notification['time'] = $time;
         return view('notification.show',compact('notification'));

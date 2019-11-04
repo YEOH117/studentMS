@@ -87,6 +87,10 @@ Route::post('/student/export','Home\StudentController@export')->name('student_ex
 Route::get('/dormitory/adjustApplication','Home\AdjustApplicationController@index')->name('adjust_application');
 //调宿_学生申请调宿逻辑
 Route::get('/dormitory/adjustApplication/{id}','Home\AdjustApplicationController@store');
+//调宿_对方处理调宿请求页
+Route::get('/application/{user}/{token}','Home\AdjustApplicationController@response')->name('adjust_answer');
+//调宿_方法出来调宿请求逻辑
+Route::get('/answer/{movestudent}/{token}/{judge}','Home\AdjustApplicationController@answer')->name('adjust_reply');
 
 //通知页
 Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');

@@ -7,7 +7,7 @@ use App\Notifications\NotificationToStudent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotificationToStudentsListener
+class NotificationToStudentsListener implements ShouldQueue
 {
     /**
      * Create the event listener.

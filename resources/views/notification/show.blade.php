@@ -19,13 +19,13 @@
                         </div>
                         <div class="panel-body">
                             <div class="col-md-offset-3 col-md-6">
-                                <div class="col-md-12" style="text-align: center;margin: 10px;background-color: #e6e6e6">
+                                <div class="col-md-12" style="text-align: center;margin: 10px;background-color: #1caf9a;border-radius: 10px;">
                                     <h1><strong>{{ $notification->data->title }}</strong></h1>
                                 </div>
-                                <div class="col-md-12" style="font-size: 10px;margin: 10px;background-color: #e6e6e6">
+                                <div class="col-md-12" style="font-size: 10px;margin: 10px;background-color: #e6e6e6;border-radius: 10px;">
                                     <span class="fa fa-clock-o"></span><strong><strong>{{ $notification->time }}</strong>
                                 </div>
-                                <div class="col-md-12" style="word-wrap:break-word;padding: 20px 10px;font-size: 20px;margin: 10px;background-color: #e6e6e6;width: 800px;height: 400px;">
+                                <div class="col-md-12" style="word-wrap:break-word;padding: 20px 10px;font-size: 20px;margin: 10px;background-color: #B0E0E6;width: 800px;height: 400px;border-radius: 10px;">
                                     &emsp;&emsp;{!! $notification->data->content !!}
                                 </div>
                             </div>

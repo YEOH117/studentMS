@@ -146,7 +146,7 @@
             <li class="xn-icon-button">
                 <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
             </li>
-            <li style="padding-left:600px;color:#ffffff;font-size: 25px;height: 50px;line-height: 50px">学生宿舍管理系统</li>
+            <li class="center-block" style="padding-left:710px;color:#ffffff;font-size: 25px;height: 50px;line-height: 50px">学生宿舍管理系统</li>
             <!-- END 侧边栏缩小按钮-->
 
 
@@ -158,7 +158,9 @@
             <!-- 消息按钮 -->
             <li class="xn-icon-button pull-right">
                 <a href="#"><span class="fa fa-comments"></span></a>
+                @if(Auth::user()->unreadNotifications->count() > 0)
                 <div class="informer informer-danger">{{ Auth::user()->unreadNotifications->count() }}</div>
+                @endif
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
                     <div class="panel-heading">
                         <h3 class="panel-title"><span class="fa fa-comments"></span> 未读通知</h3>
@@ -168,7 +170,7 @@
                     </div>
                     <div class="panel-body list-group list-group-contacts scroll" style="height: 200px;">
                         @foreach(Auth::user()->unreadNotifications as $notification)
-                        <a href="#" class="list-group-item">
+                        <a href="{{ route('notification_show',$notification->id) }}" class="list-group-item">
                             <div class="list-group-status status-online"></div>
                             <span class="contacts-title">{{ $notification->data['title'] }}</span>
                             <p>{{ str_limit($notification->data['content'],50).'...' }} </p>
