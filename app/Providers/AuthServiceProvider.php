@@ -20,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         'App\Models\Building' => 'App\Policies\BuildingPolicy',
         'App\Models\Dormitory' => 'App\Policies\DormitoryPolicy',
         'App\Models\Dormitory_member' => 'App\Policies\Dormitory_memberPolicy',
+        'App\Models\Notification' => 'App\Policies\NotificationPolicy',
     ];
 
     /**

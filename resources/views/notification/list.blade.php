@@ -26,12 +26,12 @@
                 @if(empty($notifi->read_at))background-color:#FFEFD5;@esle color:#636b6f; @endif">
                     <div class="media">
                         <div class="media-body" style="font-size: 20px;">
-                            <a href=""><strong>{{ $notifi->data->title}}</strong></a>
+                            <a href="{{ route('notification_show',$notifi->id) }}"><strong>{{ $notifi->data->title}}</strong></a>
                         </div>
                     </div>
                     <div class="media">
                         <div class="media-body" style="font-size: 15px;">
-                            <span class="fa fa-clock-o"></span><strong>{{ $notifi->created_at}}</strong>
+                            <span class="fa fa-clock-o"></span><strong> {{ $notifi->created_at}}</strong>
                         </div>
                     </div>
                 </div>

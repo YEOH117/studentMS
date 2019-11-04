@@ -91,6 +91,6 @@ Route::get('/dormitory/adjustApplication/{id}','Home\AdjustApplicationController
 //通知页
 Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');
 //查看通知
-Route::get('/notification/{id}','Home\NotificationController@show')->name('notification_show');
+Route::get('/notification/{notification}','Home\NotificationController@show')->name('notification_show');
 
 

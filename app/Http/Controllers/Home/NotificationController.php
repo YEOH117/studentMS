@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Notification;
 
 class NotificationController extends Controller
 {
@@ -28,5 +29,20 @@ class NotificationController extends Controller
             $value->created_at = $time->diffForHumans($dt);
         }
         return view('notification.list',compact('notification'));
+    }
+
+    //查看通知
+    public function show(Notification $notification){
+        //授权
+        $this->authorize('look',$notification);
+        //实例化Carbon
+        $dt = Carbon::now();
+        //时间格式化为Carbon
+        $time = carbon::parse($notification->created_at);
+
+        $notification->data = json_decode($notification->data);
+        $time = $time->diffForHumans($dt);
+        $notification['time'] = $time;
+        return view('notification.show',compact('notification'));
     }
 }
