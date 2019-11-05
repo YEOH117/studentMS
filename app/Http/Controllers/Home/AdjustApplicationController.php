@@ -372,4 +372,39 @@ class AdjustApplicationController extends Controller
         session()->flash('success','操作成功！');
         return redirect(route('adjust_list'));
     }
+
+    //学生 我的申请列表页
+    public function myList(){
+        //授权
+        $this->authorize('manage',Movestudent::class);
+        //查询记录
+        $info = Movestudent::where('user_id',Auth::user()->id)->first();
+        $user = [];
+        $target = [];
+        if(empty($info) == false){
+            //查询用户信息
+            $user = User::find($info->user_id);
+            $target = User::find($info->target_id);
+            //查询用户学生信息
+            $user = Student::where('the_student_id',$user->account)->first();
+            $target = Student::where('the_student_id',$target->account)->first();
+            //查询用户宿舍id
+            $userDormitoryId = Dormitory_member::where('student_id',$user->id)->first();
+            $targetDormitoryId = Dormitory_member::where('student_id',$target->id)->first();
+            //查询用户宿舍信息
+            $userDormitory = Dormitory::find($userDormitoryId->dormitory_id);
+            $targetDormitory = Dormitory::find($targetDormitoryId->dormitory_id);
+            //查询用户宿舍楼信息
+            $userBuilding = Building::find($userDormitory->building_id);
+            $targetBuilding = Building::find($targetDormitory->building_id);
+            //组合信息
+            $user['houseNum'] = $userDormitory->house_num;
+            $user['area'] = $userBuilding->area;
+            $user['building'] = $userBuilding->building;
+            $target['houseNum'] = $targetDormitory->house_num;
+            $target['area'] = $targetBuilding->area;
+            $target['building'] = $targetBuilding->building;
+        }
+        return view('AdjustApplication.myList',compact('user','target','info'));
+    }
 }

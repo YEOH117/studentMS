@@ -91,12 +91,14 @@ Route::get('/dormitory/adjustApplication/{id}','Home\AdjustApplicationController
 Route::get('/application/{user}/{token}','Home\AdjustApplicationController@response')->name('adjust_answer');
 //调宿_对方处理调宿请求逻辑
 Route::get('/answer/{movestudent}/{token}/{judge}','Home\AdjustApplicationController@answer')->name('adjust_reply');
+//调宿_学生我的调宿申请页
+Route::get('/application/me','Home\AdjustApplicationController@myList')->name('adjust_my_list');
 
-//宿舍调换-调宿申请列表
+//宿舍调换-调宿申请列表 管理员
 Route::get('/dormitory/adjust/list','Home\AdjustApplicationController@list')->name('adjust_list');
 //宿舍调换-调宿申请处理页 管理员
 Route::get('/dormitory/adjust/{userId}/{targetId}/{token}','Home\AdjustApplicationController@show')->name('adjust_show');
-//宿舍调换-管理员处理申请
+//宿舍调换-处理申请 管理员
 Route::get('/dormitory/process/{movestudent}/{token}/{judge}','Home\AdjustApplicationController@process')->name('adjust_process');
 
 //通知页

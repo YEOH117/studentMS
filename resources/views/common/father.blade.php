@@ -65,13 +65,15 @@
                 @endif
                 </ul>
             </li>
+            @if(Auth::user()->grade == 1)
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-calendar"></span> <span class="xn-text">宿舍调换</span></a>
                 <ul>
                     <li><a href="{{ route('adjust_application') }}"><span class="fa fa-pencil-square-o"></span> 调宿申请</a></li>
-                    <li><a href="#"><span class="fa fa-list-ul"></span> 我的调宿申请</a></li>
+                    <li><a href="{{ route('adjust_my_list') }}"><span class="fa fa-list-ul"></span> 我的调宿申请</a></li>
                 </ul>
             </li>
+            @endif
             <li class="xn-title">管理员可操作</li>
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-tasks"></span> <span class="xn-text">学生录入</span></a>
@@ -86,11 +88,15 @@
                     <li><a href="{{ route('student_sort') }}"><span class="fa fa-random"></span> 新生智能排宿</a></li>
                     <li>
                         <a href="#"><span class="fa fa-refresh"></span> 宿舍调换</a>
+                        @if($count = \App\Models\Movestudent::where('state','对方同学已同意，等待管理员处理。')->count())
                         <div class="informer informer-danger">新</div>
+                        @endif
                         <ul>
                             <li>
-                                <a href="#"><span class="fa fa-align-justify"></span> 学生调换申请</a>
-                                <div class="informer informer-danger">4</div>
+                                <a href="{{ route('adjust_list') }}"><span class="fa fa-align-justify"></span> 学生调换申请</a>
+                                @if($count)
+                                <div class="informer informer-danger">{{ $count }}</div>
+                                @endif
                             </li>
                             <li><a href="#"><span class="fa fa-expand"></span> 调宿操作</a></li>
                             <li><a href="#"><span class="fa fa-table"></span> 宿舍迁移</a></li>

@@ -17,4 +17,8 @@ class MovestudentPolicy
     public function look(User $user){
         return $user->grade >= 2;
     }
+
+    public function manage(User $user){
+        return $user->grade == 1;
+    }
 }
