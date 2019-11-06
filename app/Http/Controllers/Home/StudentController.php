@@ -604,62 +604,122 @@ class StudentController extends Controller
         return view('student.collegeShow',compact('student'));
     }
 
-    //学生-ajax请求学生信息
-    public function ajaxInquire($studentId){
-        //学号长度错误
-        if(mb_strlen($studentId) <= 9 || mb_strlen($studentId) >= 11 ){
-            $info = json_encode('输入的学号长度有误，请检测你的输入！');
-            return $info;
+    //学生-ajax请求学生宿舍信息
+//    public function ajaxInquire($studentId){
+//        //学号长度错误
+//        if(mb_strlen($studentId) <= 9 || mb_strlen($studentId) >= 11 ){
+//            $info = json_encode('输入的学号长度有误，请检测你的输入！');
+//            return $info;
+//        }
+//        //查询用户本身，错误
+//        if(\Auth::user()->account == $studentId){
+//            $info = json_encode('错误，你不能跟自身调宿！');
+//            return $info;
+//        }
+//        //查询用户住宿信息
+//        $info = Student::where('the_student_id',$studentId)->first();
+//        if(empty($info)){
+//            //查不到用户信息
+//            $info = json_encode('查找不到该学生，请检测你的输入！');
+//            return $info;
+//        }
+//        //查询宿舍id
+//        $domitoryId = Dormitory_member::where('student_id',$info->id)->first();
+//        if(empty($domitoryId)){
+//            //用户未安排住宿
+//            $info = json_encode('该学生尚未被安排住宿！');
+//            return $info;
+//        }
+//        //查询宿舍信息
+//        $dormitory = Dormitory::where('id',$domitoryId->dormitory_id)->first();
+//        if(empty($dormitory)){
+//            //宿舍信息不存在
+//            $info = json_encode('发生未知错误！');
+//            return $info;
+//        }
+//        //查询宿舍楼信息
+//        $building = Building::where('id',$dormitory->building_id)->first();
+//        if(empty($building)){
+//            //宿舍楼信息不存在
+//            $info = json_encode('发生未知错误！');
+//            return $info;
+//        }
+//        //拼接前端代码
+//        $code = '';
+//        $code = '<p>姓名：<code>'.$info->name.'</code></p>';
+//        $code .= '<p>学院：<code>'.$info->college.'</code></p>';
+//        $code .= ' <p>专业：<code>'.$info->profession.'</code></p>';
+//        $code .= ' <p>班级：<code>'.$info->class.'班</code></p>';
+//        $code .= ' <p>联系邮箱：<code>'.$info->email.'</code></p>';
+//        $code .= '<p>联系手机号：<code>'.$info->phone.'</code></p>';
+//        if($building->area >= 1){
+//            $area = '西';
+//        }else{
+//            $area = '东';
+//        }
+//        $code .= '<p>所在宿舍：<code>'.$area.$building->building.'栋'.$dormitory->house_num.'宿舍';
+//        //返回
+//        $info = json_encode($code);
+//        return $info;
+//    }
+
+    //学生-ajax请求学生宿舍信息
+    public function ajaxInquire($area,$building,$houseNum){
+        //授权
+        $this->authorize('ajax',Student::class);
+        //防止恶意访问
+        if($area > 1 || $area < 0){
+            return;
         }
-        //查询用户本身，错误
-        if(\Auth::user()->account == $studentId){
-            $info = json_encode('错误，你不能跟自身调宿！');
-            return $info;
-        }
-        //查询用户住宿信息
-        $info = Student::where('the_student_id',$studentId)->first();
-        if(empty($info)){
-            //查不到用户信息
-            $info = json_encode('查找不到该学生，请检测你的输入！');
+        $info = '';
+        //查询大楼信息
+        $building = Building::where('area',$area)->where('building',$building)->select('id')->first();
+        if(empty($building)){
+            $info = '查无此宿舍！';
+            $info = json_encode($info);
             return $info;
         }
         //查询宿舍id
-        $domitoryId = Dormitory_member::where('student_id',$info->id)->first();
-        if(empty($domitoryId)){
-            //用户未安排住宿
-            $info = json_encode('该学生尚未被安排住宿！');
-            return $info;
-        }
-        //查询宿舍信息
-        $dormitory = Dormitory::where('id',$domitoryId->dormitory_id)->first();
-        if(empty($dormitory)){
-            //宿舍信息不存在
-            $info = json_encode('发生未知错误！');
-            return $info;
-        }
-        //查询宿舍楼信息
-        $building = Building::where('id',$dormitory->building_id)->first();
+        $dormitoryId = Dormitory::where('house_num',$houseNum)->where('building_id',$building->id)->select('id','roon_people')->first();
         if(empty($building)){
-            //宿舍楼信息不存在
-            $info = json_encode('发生未知错误！');
+            $info = '查无此宿舍！';
+            $info = json_encode($info);
             return $info;
         }
-        //拼接前端代码
-        $code = '';
-        $code = '<p>姓名：<code>'.$info->name.'</code></p>';
-        $code .= '<p>学院：<code>'.$info->college.'</code></p>';
-        $code .= ' <p>专业：<code>'.$info->profession.'</code></p>';
-        $code .= ' <p>班级：<code>'.$info->class.'班</code></p>';
-        $code .= ' <p>联系邮箱：<code>'.$info->email.'</code></p>';
-        $code .= '<p>联系手机号：<code>'.$info->phone.'</code></p>';
-        if($building->area >= 1){
-            $area = '西';
-        }else{
-            $area = '东';
+        //查询宿舍人员
+        $studentId = Dormitory_member::where('dormitory_id',$dormitoryId->id)->get();
+        if($studentId->count() <= 0){
+            //空宿舍，输出空位，可申请
+            for($i = 0; $i < $dormitoryId->roon_people; ++$i){
+                $info .= '<tr><td>空位</td><td></td><td></td><td>'.'<a onclick=one_confirm("/adjust/application/'.$dormitoryId->id
+                        .'/none'.'") class="btn btn-danger">申请调宿</a></td></tr>';
+            }
+            $info = json_encode($info);
+            return $info;
         }
-        $code .= '<p>所在宿舍：<code>'.$area.$building->building.'栋'.$dormitory->house_num.'宿舍';
+        //查询学生信息
+        foreach ($studentId as $key => $value){
+            $student[$key] = $value->student_id;
+        }
+        $student = Student::whereIn('id',$student)->get();
+        if($studentId->count() <= 0){
+            $info = '出现未知错误！';
+            $info = json_encode($info);
+            return $info;
+        }
+        //拼接html
+        for($i = 0; $i < $dormitoryId->roon_people; ++$i){
+            if(empty($student[$i])){
+                $info .= '<tr><td>空位</td><td></td><td></td><td>'.'<a onclick=one_confirm("/adjust/application/'.$dormitoryId->id
+                    .'/none'.'") class="btn btn-danger">申请调宿</a></td></tr>';
+            }else{
+                $info .= '<tr><td>'.$student[$i]->name.'</td><td>'.$student[$i]->the_student_id.'</td><td>'.$student[$i]->phone.'</td><td>'
+                    .'<a onclick=one_confirm("/adjust/application/'.$student[$i]->id.'") class="btn btn-danger">申请调宿</a></td></tr>';
+            }
+
+        }
         //返回
-        $info = json_encode($code);
+        $info = json_encode($info);
         return $info;
     }
 }

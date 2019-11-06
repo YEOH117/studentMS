@@ -78,15 +78,17 @@ Route::post('/student/classSearch','Home\StudentController@classesShow')->name('
 Route::get('/student/collegeSearch','Home\StudentController@collegeSearch')->name('student_college_show');
 Route::post('/student/collegeShow','Home\StudentController@collegeShow')->name('student_college_show');
 //查询_ajax请求学生信息
-Route::get('/ajax/{student}','Home\StudentController@ajaxInquire');
+Route::get('/ajax/{area}/{building}/{dormitory}','Home\StudentController@ajaxInquire');
 
 //学生信息导出
 Route::post('/student/export','Home\StudentController@export')->name('student_export');
 
 //调宿_学生申请调宿页
 Route::get('/dormitory/adjustApplication','Home\AdjustApplicationController@index')->name('adjust_application');
-//调宿_学生申请调宿逻辑
-Route::get('/dormitory/adjustApplication/{id}','Home\AdjustApplicationController@store');
+//调宿_学生申请调宿逻辑 人-人
+Route::get('/adjust/application/{student}','Home\AdjustApplicationController@store');
+//调宿_学生申请调宿逻辑 人-空位
+Route::get('/adjust/application/{dormitory}/none','Home\AdjustApplicationController@noneStore');
 //调宿_对方处理调宿请求页
 Route::get('/application/{user}/{token}','Home\AdjustApplicationController@response')->name('adjust_answer');
 //调宿_对方处理调宿请求逻辑
@@ -96,10 +98,14 @@ Route::get('/application/me','Home\AdjustApplicationController@myList')->name('a
 
 //宿舍调换-调宿申请列表 管理员
 Route::get('/dormitory/adjust/list','Home\AdjustApplicationController@list')->name('adjust_list');
-//宿舍调换-调宿申请处理页 管理员
-Route::get('/dormitory/adjust/{userId}/{targetId}/{token}','Home\AdjustApplicationController@show')->name('adjust_show');
-//宿舍调换-处理申请 管理员
+//宿舍调换-调宿申请处理页 管理员 人-人
+Route::get('/dormitory/adjust/{userId}/{token}','Home\AdjustApplicationController@show')->name('adjust_show');
+//宿舍调换-调宿申请处理页 管理员 人-空位
+Route::get('/dormitory/adjust/{userId}/{token}/none','Home\AdjustApplicationController@noneShow')->name('adjust_show_none');
+//宿舍调换-处理申请 管理员 人-人
 Route::get('/dormitory/process/{movestudent}/{token}/{judge}','Home\AdjustApplicationController@process')->name('adjust_process');
+//宿舍调换-处理申请 管理员 人-空位
+Route::get('/dormitory/process/{movestudent}/{token}/{judge}/none','Home\AdjustApplicationController@noneProcess')->name('adjust_process_none');
 
 //通知页
 Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');

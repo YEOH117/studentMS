@@ -21,74 +21,66 @@
                             <h3 class="panel-title"><strong>调宿申请</strong></h3>
                         </div>
                         <div class="panel-body ">
-                            <p><span class="fa fa-exclamation-circle"></span>先查询目标同学，才能进行调宿申请！</p>
+                            <p><span class="fa fa-exclamation-circle"></span>先查询宿舍，才能进行调宿申请！</p>
                         </div>
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-md-3 col-xs-12 control-label">目标同学的学号</label>
+                        <div class="panel-body row ">
+                            <div class="col-md-6 col-md-offset-3 col-xs-12 form-inline">
+                                <div class="col-md-2 col-xs-12">
+                                    <div class="form-group">
+                                        <label>区域</label>
+                                        <select class="form-control" id="area">
+                                            <option value="0">东区</option>
+                                            <option value="1">西区</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="col-md-4 col-xs-12">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-user"></span></span>
-                                        <input type="text" id="studentId" class="form-control"/>
+                                    <div class="form-group">
+                                        <label>宿舍楼</label>
+                                        <input type="text" class="form-control" id="building" placeholder="请输入宿舍楼。">
                                     </div>
-                                    <span class="help-block">必填！</span>
                                 </div>
-                                <div class="col-md-3 pull-right">
-                                    <button class="btn bg-info" onclick="search()">查询</button>
+                                <div class="col-md-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label>宿舍号</label>
+                                        <input type="text" class="form-control" id="houseNum" placeholder="请输入宿舍号">
+                                    </div>
                                 </div>
-                                <script>
-                                    var hre = "#";
-                                    function search(){
-                                        var studentId = $('#studentId').val();
-                                        $('#student').html('<p><label>目标同学信息</label></p>');
-                                        $.get("/ajax/"+studentId,function(data){
-                                            var info = JSON.parse(data);
-                                            $('#student').append(info);
-                                            hre = "/dormitory/adjustApplication/" + studentId;
-                                        });
-                                    }
-                                    function del_confirm()
-                                    {
-                                        var r=confirm("确定申请调宿？是否继续？")
-                                        if (r==true)
-                                        {
-                                            window.location.href=hre;
-                                        }
-                                    }
-                                </script>
+                                <div class="col-md-2 col-xs-12 ">
+                                    <a class="btn bg-primary pull-right" onclick="inquire()">查询</a>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-md-2 col-md-offset-3" style="border:1px dashed #E9967A;height: 230px;">
-                                    <div id="student">
-                                        <p><label>目标同学信息</label></p>
-                                    </div>
-                                </div>
-                                <div class="col-md-2" style="text-align: center;padding-top: 100px;">
-                                    <a  class="btn bg-primary" onclick="del_confirm()">申请调宿</a>
-                                </div>
-                                <div class="col-md-2" style="border:1px solid #E5E5E5;height: 230px;">
-                                        <p><label>我的信息</label></p>
-                                        <p>姓名：<code>{{ $info->name }}</code></p>
-                                        <p>学院：<code>{{ $info->college }}</code></p>
-                                        <p>专业：<code>{{ $info->profession }}</code></p>
-                                        <p>班级：<code>{{ $info->class }}班</code></p>
-                                        <p>联系邮箱：<code>{{ $info->email }}</code></p>
-                                        <p>联系手机号：<code>{{ $info->phone }}</code></p>
-                                        <p>所在宿舍：
-                                            <code>
-                                                @if($building->area)
-                                                    西
-                                                @else
-                                                    东
-                                                @endif
-                                                {{ $building->building }}栋
-                                                {{ $dormitory->house_num }}宿舍
-                                            </code>
-                                        </p>
-
-                                </div>
+                            <div class="col-md-6 col-md-offset-3 col-xs-12"  style="background-color: #e8e8e8;margin-top:20px;border-radius:15px;">
+                                <table class="table table-hover" id="info">
+                                    <tr>
+                                        <th class="col-md-3">姓名</th>
+                                        <th class="col-md-3">学号</th>
+                                        <th class="col-md-3">联系手机号</th>
+                                        <th class="col-md-1">操作</th>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
+                        <script>
+                            function inquire(){
+                                var area = $('#area').val();
+                                var building = $('#building').val();
+                                var houseNum = $('#houseNum').val();
+                                $('#info').html('<tr><th class="col-md-3">姓名</th><th class="col-md-3">学号</th><th class="col-md-3">联系手机号</th><th class="col-md-1">操作</th></tr>');
+                                $.get("/ajax/"+area+'/'+building+'/'+houseNum,function(data){
+                                    var info = JSON.parse(data);
+                                    $('#info').append(info);
+                                });
+                            }
+                            function one_confirm(hre)
+                            {
+                                var r=confirm("确定申请调宿？是否继续？")
+                                if (r==true)
+                                {
+                                    window.location.href=hre;
+                                }
+                            }
+                        </script>
                         <div class="panel-footer">
 
                         </div>

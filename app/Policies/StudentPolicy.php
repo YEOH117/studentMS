@@ -18,6 +18,10 @@ class StudentPolicy
         return $user->grade >= 2;
     }
 
+    public function ajax(User $user){
+        return $user->grade == 1;
+    }
+
     /**
      * Determine whether the user can view the student.
      *

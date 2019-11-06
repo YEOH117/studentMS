@@ -93,7 +93,7 @@
                         @endif
                         <ul>
                             <li>
-                                <a href="{{ route('adjust_list') }}"><span class="fa fa-align-justify"></span> 学生调换申请</a>
+                                <a href="#"><span class="fa fa-align-justify"></span> 学生调换申请</a>
                                 @if($count)
                                 <div class="informer informer-danger">{{ $count }}</div>
                                 @endif
