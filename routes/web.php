@@ -111,5 +111,7 @@ Route::get('/dormitory/process/{movestudent}/{token}/{judge}/none','Home\AdjustA
 Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');
 //查看通知
 Route::get('/notification/{notification}','Home\NotificationController@show')->name('notification_show');
+//删除全部通知
+Route::get('/notification/all/del','Home\NotificationController@delete')->name('notification_del');
 
 

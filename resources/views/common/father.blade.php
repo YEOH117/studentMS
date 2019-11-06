@@ -74,6 +74,7 @@
                 </ul>
             </li>
             @endif
+            @if(Auth::user()->grade >= 2)
             <li class="xn-title">管理员可操作</li>
             <li class="xn-openable">
                 <a href="#"><span class="fa fa-tasks"></span> <span class="xn-text">学生录入</span></a>
@@ -88,7 +89,7 @@
                     <li><a href="{{ route('student_sort') }}"><span class="fa fa-random"></span> 新生智能排宿</a></li>
                     <li>
                         <a href="#"><span class="fa fa-refresh"></span> 宿舍调换</a>
-                        @if($count = \App\Models\Movestudent::where('state','对方同学已同意，等待管理员处理。')->count())
+                        @if($count = \App\Models\Movestudent::where('state',2)->count())
                         <div class="informer informer-danger">新</div>
                         @endif
                         <ul>
@@ -138,6 +139,7 @@
             </li>
                 @endif
             @endif
+                @endif
         </ul>
         <!-- END X-NAVIGATION -->
     </div>

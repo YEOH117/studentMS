@@ -49,4 +49,14 @@ class NotificationController extends Controller
         $notification['time'] = $time;
         return view('notification.show',compact('notification'));
     }
+
+    //删除用户全部通知
+    public function delete(){
+        if(Auth::check()){
+            $user = Auth::user();
+            $user->notifications()->delete();
+            session()->flash('success','删除成功！');
+            return redirect()->back();
+        }
+    }
 }

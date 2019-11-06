@@ -38,10 +38,24 @@
             @endforeach
             </div>
             <div class="panel-footer" >
-                <div class="col-md-12" style="text-align: center;">
+                <div class="col-md-8">
                     {{ $notification->links() }}
                 </div>
+                <div class="col-md-4">
+                    @if($notification->count() > 0)
+                    <a class="btn btn-danger pull-right" onclick="yes_confirm()">删除全部通知</a>
+                    @endif
+                </div>
             </div>
+            <script>
+                function yes_confirm() {
+                    var r=confirm("确定删除全部通知？继续请按确定键，返回按取消。")
+                    if (r==true)
+                    {
+                        window.location.href="{{ route('notification_del') }}";
+                    }
+                }
+            </script>
         </div>
 
     </div>
