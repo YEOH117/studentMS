@@ -20,6 +20,7 @@ class CreateMovestudentsTable extends Migration
             $table->integer('user_id')->notnull();
             $table->unique('user_id');
             $table->string('state',20)->notnull();
+            $table->index('state');
             $table->string('token',100)->notnull();
             $table->timestamps();
         });

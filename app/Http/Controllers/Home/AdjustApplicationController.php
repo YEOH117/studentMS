@@ -549,34 +549,43 @@ class AdjustApplicationController extends Controller
     public function myList(){
         //授权
         $this->authorize('manage',Movestudent::class);
-        //查询记录
-        $info = Movestudent::where('user_id',Auth::user()->id)->first();
-        $user = [];
-        $target = [];
-        if(empty($info) == false){
-            //查询用户信息
-            $user = User::find($info->user_id);
-            $target = User::find($info->target_id);
-            //查询用户学生信息
-            $user = Student::where('the_student_id',$user->account)->first();
-            $target = Student::where('the_student_id',$target->account)->first();
-            //查询用户宿舍id
-            $userDormitoryId = Dormitory_member::where('student_id',$user->id)->first();
-            $targetDormitoryId = Dormitory_member::where('student_id',$target->id)->first();
-            //查询用户宿舍信息
-            $userDormitory = Dormitory::find($userDormitoryId->dormitory_id);
-            $targetDormitory = Dormitory::find($targetDormitoryId->dormitory_id);
-            //查询用户宿舍楼信息
-            $userBuilding = Building::find($userDormitory->building_id);
-            $targetBuilding = Building::find($targetDormitory->building_id);
-            //组合信息
-            $user['houseNum'] = $userDormitory->house_num;
-            $user['area'] = $userBuilding->area;
-            $user['building'] = $userBuilding->building;
-            $target['houseNum'] = $targetDormitory->house_num;
-            $target['area'] = $targetBuilding->area;
-            $target['building'] = $targetBuilding->building;
+        //获取当前用户
+        $user = Auth::user();
+        //查询我的申请
+        $myApplication = Movestudent::where('user_id',$user->id)->first();
+        //查询关于我的申请
+        $otherApplication = Movestudent::where('target_id',$user->id)->where('state',1)->get();
+        //组合信息
+        if(empty($myApplication) == false){
+            $t = User::find($myApplication->target_id);
+            $t = Student::where('the_student_id',$t->account)->first();
+            $myInfo['target'] = $t;
+            $myInfo['user'] = $user->name;
+            $myInfo['token'] = $myApplication->token;
+            $myInfo['state'] = $myApplication->info;
+            $myInfo['movestudent'] = $myApplication->id;
         }
-        return view('AdjustApplication.myList',compact('user','target','info'));
+        if($otherApplication->count() > 0){
+            foreach ($otherApplication as $key => $value){
+                $u = User::find($value->user_id);
+                $u = Student::where('the_student_id',$u->account)->first();
+                $otherInfo[$key]['target'] = $u;
+                $otherInfo[$key]['user'] = $user->name;
+                $otherInfo[$key]['token'] = $value->token;
+                $otherInfo[$key]['user_id'] = $value->user_id;
+                $otherInfo[$key]['state'] = '等待你的同意';
+            }
+        }
+        return view('AdjustApplication.myList',compact('myInfo','otherInfo'));
+    }
+
+    //删除我的调宿请求
+    public function delete(Movestudent $movestudent){
+        //授权
+        $this->authorize('owner',$movestudent);
+        //删除记录
+        $movestudent->delete();
+        session()->flash('success','删除调宿请求成功！');
+        return redirect('/');
     }
 }

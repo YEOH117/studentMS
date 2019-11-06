@@ -94,13 +94,12 @@
                         @endif
                         <ul>
                             <li>
-                                <a href="#"><span class="fa fa-align-justify"></span> 学生调换申请</a>
+                                <a href="{{ route('adjust_list') }}"><span class="fa fa-align-justify"></span> 学生调换申请</a>
                                 @if($count)
                                 <div class="informer informer-danger">{{ $count }}</div>
                                 @endif
                             </li>
                             <li><a href="#"><span class="fa fa-expand"></span> 调宿操作</a></li>
-                            <li><a href="#"><span class="fa fa-table"></span> 宿舍迁移</a></li>
                         </ul>
                     </li>
                     <li><a href="#"><span class="fa fa-arrow-right"></span> 退宿操作</a></li>

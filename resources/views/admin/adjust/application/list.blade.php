@@ -21,13 +21,19 @@
                     <div class=" col-md-6 col-md-offset-3" style="background-color: #1caf9a;height: 40px;">
                         <div class="col-md-4 ">申请人</div>
                         <div class="col-md-4">被申请人</div>
-                        <div class="col-md-4"></div>
+                        <div class="col-md-4">操作</div>
                     </div>
                     @foreach($moveStudent as $value)
                     <div class=" col-md-6 col-md-offset-3" style="height: 40px;">
-                        <div class="col-md-4 ">{{ $value['targetName'] }}</div>
-                        <div class="col-md-4">{{ $value['userName'] }}</div>
-                        <div class="col-md-4"><a href="{{ route('adjust_show',[$value->user_id,$value->target_id,$value->token]) }}" class="btn btn-info">详请</a></div>
+                        <div class="col-md-4 ">{{ $value['userName'] }}</div>
+                        <div class="col-md-4">
+                            @if(!empty($value['targetName']))
+                            {{ $value['targetName'] }}
+                            @endif
+                        </div>
+                        <div class="col-md-4">
+                            <a href="@if(!empty($value['targetName'])){{ route('adjust_show',[$value->user_id,$value->token]) }}@else{{ route('adjust_show_none',[$value->user_id,$value->token]) }}@endif" class="btn btn-info">详请</a>
+                        </div>
                     </div>
                     @endforeach
                 </div>

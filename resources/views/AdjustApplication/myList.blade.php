@@ -3,8 +3,8 @@
 @section('navigation')
     <ul class="breadcrumb">
         <li><a href="{{ Route('/') }}">主页</a></li>
-        <li><a href="#">信息查询</a></li>
-        <li class="active">班级学生信息详情页</li>
+        <li><a href="#">宿舍调换</a></li>
+        <li class="active">我的调宿申请</li>
     </ul>
 @endsection
 
@@ -14,53 +14,53 @@
         <div class="panel panel-default">
             <div class="panel-heading row">
             </div>
-                <div class="panel-body mail" >
-                    <div class="col-md-10 col-md-offset-1">
-                        <div class="mail-item mail-unread  row bg-success">
-                            <div class="mail-checkbox "></div>
-                            <div class="col-md-1 ">申请人姓名</div>
-                            <div class="col-md-1">申请人学号</div>
-                            <div class="col-md-1">申请人专业</div>
-                            <div class="col-md-1">申请人宿舍</div>
-                            <div class="col-md-1">被申请人姓名</div>
-                            <div class="col-md-1">被申请人学号</div>
-                            <div class="col-md-1">被申请人专业</div>
-                            <div class="col-md-1">被申请人宿舍</div>
-                            <div class="col-md-2">申请进度</div>
-                            <div class="col-md-1">操作</div>
-                        </div>
-                        @foreach($user as $key => $value)
-                            <div class="mail-item mail-unread  row">
-                                <div class="col-md-1 ">{{ $value['name'] }}</div>
-
-                                <div class="col-md-1">{{ $value['the_student_id'] }}</div>
-
-                                <div class="col-md-1">{{ $value['profession']}}</div>
-
-                                <div class="col-md-1">
-                                    @if($value['area'] > 0)
-                                        西
-                                    @else
-                                        东
-                                    @endif
-                                        {{ $value['building'] }}栋 {{ $value['house_num'] }}宿舍
-                                </div>
-
-                                <div class="col-md-1">{{ $target[$key]['name'] }}</div>
-                                <div class="col-md-1">{{ $target[$key]['the_student_id'] }}班</div>
-                                <div class="col-md-1">{{ $target[$key]['profession'] }}班</div>
-                                <div class="col-md-1">
-                                    @if($target[$key]['area'] > 0)
-                                        西
-                                    @else
-                                        东
-                                    @endif
-                                    {{ $target[$key]['building'] }}栋 {{ $target[$key]['house_num'] }}宿舍
-                                </div>
-                                <div class="col-md-2">{{ $info->state}}</div>
-                                <div class="col-md-1"><a class="btn btn-danger">删除</a></div>
-                            </div>
-                        @endforeach
+                <div class="panel-body" >
+                    <div class="col-md-6 col-md-offset-3 col-xs-12"  style="background-color: #e8e8e8;margin-top:20px;border-radius:15px;">
+                        <table class="table table-hover" >
+                            <tr>
+                                <th class="col-md-1">申请人</th>
+                                <th class="col-md-2">被申请人<div class="pull-right">|对方:</div></th>
+                                <th class="col-md-2">学号</th>
+                                <th class="col-md-2">专业</th>
+                                <th class="col-md-2">联系手机号</th>
+                                <th class="col-md-2">状态</th>
+                                <th class="col-md-1">操作</th>
+                            </tr>
+                            @if(empty($myInfo) == false)
+                                <tr>
+                                    <td class="col-md-1">{{ $myInfo['user'] }}</td>
+                                    <td class="col-md-2">{{ $myInfo['target']->name }}</td>
+                                    <td class="col-md-2">{{ $myInfo['target']->the_student_id }}</td>
+                                    <td class="col-md-2">{{ $myInfo['target']->profession }}</td>
+                                    <td class="col-md-2">{{ $myInfo['target']->phone }}</td>
+                                    <td class="col-md-2"><label style="color: #CD5C5C;">{{ $myInfo['state'] }}</label></td>
+                                    <td class="col-md-1"><a class="btn btn-danger" onclick="del_confirm()">删除此请求</a></td>
+                                </tr>
+                                <script>
+                                    function del_confirm()
+                                    {
+                                        var r=confirm("确定删除调宿请求？是否继续？")
+                                        if (r==true)
+                                        {
+                                            window.location.href="{{ route('adjust_del',$myInfo['movestudent']) }}";
+                                        }
+                                    }
+                                </script>
+                            @endif
+                            @if(empty($otherInfo) == false)
+                                @foreach($otherInfo as $value)
+                                    <tr>
+                                        <td class="col-md-1">{{ $value['target']->name }}</td>
+                                        <td class="col-md-2">{{ $value['user'] }}</td>
+                                        <td class="col-md-2">{{ $value['target']->the_student_id }}</td>
+                                        <td class="col-md-2">{{ $value['target']->profession }}</td>
+                                        <td class="col-md-2">{{ $value['target']->phone }}</td>
+                                        <td class="col-md-2"><label style="color: #CD5C5C;">{{ $value['state'] }}</label></td>
+                                        <td class="col-md-1"><a href="{{ route('adjust_answer',[$value['user_id'],$value['token']]) }}" class="btn btn-primary">详情</a></td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </table>
                     </div>
                 </div>
                 <div class="panel-footer">

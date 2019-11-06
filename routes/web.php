@@ -83,6 +83,8 @@ Route::get('/ajax/{area}/{building}/{dormitory}','Home\StudentController@ajaxInq
 //学生信息导出
 Route::post('/student/export','Home\StudentController@export')->name('student_export');
 
+//删除我的调宿请求
+Route::get('/application/{movestudent}/del','Home\AdjustApplicationController@delete')->name('adjust_del');
 //调宿_学生申请调宿页
 Route::get('/dormitory/adjustApplication','Home\AdjustApplicationController@index')->name('adjust_application');
 //调宿_学生申请调宿逻辑 人-人
