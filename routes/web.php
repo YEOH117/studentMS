@@ -108,6 +108,9 @@ Route::get('/dormitory/adjust/{userId}/{token}/none','Home\AdjustApplicationCont
 Route::get('/dormitory/process/{movestudent}/{token}/{judge}','Home\AdjustApplicationController@process')->name('adjust_process');
 //宿舍调换-处理申请 管理员 人-空位
 Route::get('/dormitory/process/{movestudent}/{token}/{judge}/none','Home\AdjustApplicationController@noneProcess')->name('adjust_process_none');
+//宿舍初始化-管理员初始化宿舍人员
+Route::get('/dormitory/init','Home\AdjustApplicationController@init')->name('adjust_init');
+Route::post('/dormitory/init','Home\AdjustApplicationController@initAdjust')->name('adjust_init');
 
 //通知页
 Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');

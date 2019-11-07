@@ -588,4 +588,62 @@ class AdjustApplicationController extends Controller
         session()->flash('success','删除调宿请求成功！');
         return redirect('/');
     }
+
+    //管理员调宿功能-初始化用
+    public function init(){
+        //授权
+        $this->authorize('general',Dormitory_member::class);
+        return view('admin.dormitory.student.adjust');
+    }
+
+    //管理员调宿功能 逻辑
+    public function initAdjust(Request $request){
+        //授权
+        $this->authorize('general',Dormitory_member::class);
+        //表单验证
+        $this->validate($request,[
+            'area' => 'required',
+            'building' => 'required',
+            'dormitory' => 'required',
+            'student' => 'required',
+            //'verification' => 'required|captcha',
+        ]);
+        //查询学生id
+        $student = Student::where('the_student_id',$request->student)->where('is_arrange',0)->first();
+        if(empty($student)){
+            session()->flash('danger','该学生已经安排住宿了，无需重复安排！');
+            return redirect()->back();
+        }
+        //查询宿舍楼id
+        $building = Building::where('area',$request->area)->where('building',$request->building)->first();
+        if(empty($building)){
+            session()->flash('danger','查询不到该宿舍楼，请检查您的填写！');
+            return redirect()->back();
+        }
+        //获取宿舍id
+        $dormitory = Dormitory::where('building_id',$building->id)->where('house_num',$request->dormitory)->first();
+        if(empty($dormitory)){
+            session()->flash('danger','查询不到该宿舍，请检查您的填写！');
+            return redirect()->back();
+        }
+        if($dormitory->Remain_number <= 0){
+            session()->flash('danger','该宿舍已满员！');
+            return redirect()->back();
+        }
+        //安排住宿
+        $info = Dormitory_member::create([
+           'dormitory_id' => $dormitory->id,
+            'student_id' => $student->id,
+        ]);
+        if(empty($info)){
+            session()->flash('danger','出现未知错误，请稍后再试！');
+            return redirect()->back();
+        }
+        //修改学生状态
+        $student->is_arrange = 1;
+        $student->save();
+        
+        session()->flash('success','安排住宿成功！');
+        return redirect()->back();
+    }
 }

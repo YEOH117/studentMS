@@ -32,20 +32,16 @@
             <li class="xn-profile">
                 <a href="#" class="profile-mini">
                     <!--小头像 -->
-                    <img src="assets/images/users/avatar.jpg" alt="小头像"/>
+                    <img src="#" alt="小头像"/>
                 </a>
                 <div class="profile">
                     <div class="profile-image">
                         <!--大头像 -->
-                        <img src="assets/images/users/avatar.jpg" alt="大头像"/>
+                        <img src="#" alt="大头像"/>
                     </div>
                     <div class="profile-data">
                         <div class="profile-data-name">用户名</div>
                         <div class="profile-data-title">身份</div>
-                    </div>
-                    <div class="profile-controls">
-                        <a href="pages-profile.html" class="profile-control-left"><span class="fa fa-info"></span></a>
-                        <a href="pages-messages.html" class="profile-control-right"><span class="fa fa-envelope"></span></a>
                     </div>
                 </div>
             </li>
@@ -99,7 +95,7 @@
                                 <div class="informer informer-danger">{{ $count }}</div>
                                 @endif
                             </li>
-                            <li><a href="#"><span class="fa fa-expand"></span> 调宿操作</a></li>
+                            <li><a href="{{ route('adjust_init') }}"><span class="fa fa-expand"></span> 调宿操作</a></li>
                         </ul>
                     </li>
                     <li><a href="#"><span class="fa fa-arrow-right"></span> 退宿操作</a></li>
