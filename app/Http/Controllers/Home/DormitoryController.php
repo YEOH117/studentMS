@@ -10,6 +10,7 @@ use App\Models\Building;
 use App\Models\Dormitory;
 use App\Events\CreateDormitoryMember;
 use App\Events\UpdateIsArrange;
+use App\Models\User;
 
 class DormitoryController extends Controller
 {
@@ -318,6 +319,57 @@ class DormitoryController extends Controller
         }
         session()->flash('success', '提交智能排宿成功，系统将在后台自动智能排宿，请根据安排人数等待3~10分钟！');
         return redirect('/');
+
+    }
+
+    //学生退宿 页
+    public function delete(){
+        //授权
+        $this->authorize('general',Student::class);
+        return view('admin.dormitory.del');
+    }
+
+    //学生退宿逻辑
+    public function del(Request $request){
+        //授权
+        $this->authorize('general',Student::class);
+        //表单验证
+        $this->validate($request,[
+            'student' => 'required',
+            'verification' => 'required|captcha',
+        ]);
+        $student = Student::where('the_student_id',$request->student)->first();
+        if(empty($student)){
+            session()->flash('danger','查询不到该学生，请检查您的填写');
+            return redirect()->back();
+        }
+        //查询住宿情况
+        $dormitoryId = Dormitory_member::where('student_id',$student->id)->first();
+        if(empty($dormitoryId)){
+            session()->flash('danger','查询不到该学生住宿情况!');
+            return redirect()->back();
+        }
+        //查询宿舍情况
+        $dormitory = Dormitory::find($dormitoryId->dormitory_id);
+        if(empty($dormitory)){
+            session()->flash('danger','查询宿舍出错，请稍后再试！');
+            return redirect()->back();
+        }
+        //进行退宿操作
+            //删除住宿记录
+        $dormitoryId->delete();
+            //将宿舍剩余人数+1
+        $dormitory->Remain_number += 1;
+        $dormitory->save();
+            //查询学生用户账号并删除
+        $user = User::where('account',$student->the_student_id)->first();
+        if(empty($user) == false){
+            $user->delete();
+        }
+            //删除学生信息
+        $student->delete();
+        session()->flash('success','退宿成功！');
+        return redirect()->back();
 
     }
 

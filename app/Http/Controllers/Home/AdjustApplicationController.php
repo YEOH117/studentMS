@@ -606,7 +606,7 @@ class AdjustApplicationController extends Controller
             'building' => 'required',
             'dormitory' => 'required',
             'student' => 'required',
-            //'verification' => 'required|captcha',
+            'verification' => 'required|captcha',
         ]);
         //查询学生id
         $student = Student::where('the_student_id',$request->student)->where('is_arrange',0)->first();
@@ -642,7 +642,7 @@ class AdjustApplicationController extends Controller
         //修改学生状态
         $student->is_arrange = 1;
         $student->save();
-        
+
         session()->flash('success','安排住宿成功！');
         return redirect()->back();
     }

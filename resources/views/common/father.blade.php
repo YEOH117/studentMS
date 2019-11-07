@@ -98,7 +98,7 @@
                             <li><a href="{{ route('adjust_init') }}"><span class="fa fa-expand"></span> 调宿操作</a></li>
                         </ul>
                     </li>
-                    <li><a href="#"><span class="fa fa-arrow-right"></span> 退宿操作</a></li>
+                    <li><a href="{{ route('dormitory_student_del') }}"><span class="fa fa-arrow-right"></span> 退宿操作</a></li>
                     <li>
                         <a href="#"><span class="fa fa-tasks"></span> 登记备案</a>
                         <ul>
