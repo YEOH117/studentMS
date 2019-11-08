@@ -115,12 +115,25 @@ Route::post('/dormitory/init','Home\AdjustApplicationController@initAdjust')->na
 Route::get('/dormitory/del','Home\DormitoryController@delete')->name('dormitory_student_del');
 Route::post('/dormitory/del','Home\DormitoryController@del')->name('dormitory_student_del');
 
-
 //通知页
 Route::get('/notification/list','Home\NotificationController@index')->name('notification_list');
 //查看通知
 Route::get('/notification/{notification}','Home\NotificationController@show')->name('notification_show');
 //删除全部通知
 Route::get('/notification/all/del','Home\NotificationController@delete')->name('notification_del');
+
+//登记备案列表
+Route::get('filing/list','Home\FilingController@index')->name('filing_list');
+//离校登记表页
+Route::get('/filing/leaveSchool','Home\FilingController@leaveSchool')->name('filing_leave');
+//住宿登记表页
+Route::get('/filing/deferSchool','Home\FilingController@deferSchool')->name('filing_defer');
+//备案提交逻辑
+Route::post('/filing/store','Home\FilingController@store')->name('filing_store');
+//ajax查询学生备案记录
+Route::get('/filing/ajax/{student}','Home\FilingController@ajaxInquire')->name('filing_ajax');
+//显示备案记录
+Route::get('/filing/{filing}','Home\FilingController@show')->name('filing_show');
+
 
 

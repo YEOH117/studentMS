@@ -102,9 +102,9 @@
                     <li>
                         <a href="#"><span class="fa fa-tasks"></span> 登记备案</a>
                         <ul>
-                            <li><a href="#"><span class="fa fa-align-justify"></span> 查询/查看备案</a></li>
-                            <li><a href="#"><span class="fa fa-th-large"></span> 离校填写表</a></li>
-                            <li><a href="#"><span class="fa fa-table"></span> 住宿填写表</a></li>
+                            <li><a href="{{ route('filing_list') }}"><span class="fa fa-align-justify"></span> 查询/查看备案</a></li>
+                            <li><a href="{{ route('filing_leave') }}"><span class="fa fa-th-large"></span> 离校填写表</a></li>
+                            <li><a href="{{ route('filing_defer') }}"><span class="fa fa-table"></span> 住宿填写表</a></li>
                         </ul>
                     </li>
                 </ul>
