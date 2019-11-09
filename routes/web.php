@@ -135,5 +135,33 @@ Route::get('/filing/ajax/{student}','Home\FilingController@ajaxInquire')->name('
 //显示备案记录
 Route::get('/filing/{filing}','Home\FilingController@show')->name('filing_show');
 
+//个人资料页
+Route::get('/user/me','Home\UserController@index')->name('user_me');
+Route::post('/user/me','Home\UserController@store')->name('user_me');
+//头像上传
+Route::post('/user/avatar','Home\UserController@upload')->name('user_avatar');
+//邮箱设置按钮
+Route::get('/user/set/email','Home\UserController@setEmail')->name('user_email');
+//ajax请求，给原邮箱发送验证码
+Route::post('/user/email/code','Home\UserController@sendVerifyEmail')->name('user_email_code');
+//给邮箱发送激活邮件
+Route::post('/user/email/active','Home\UserController@sendActiveEmail')->name('user_email_active');
+//给初始化邮箱发送激活邮件
+Route::post('/user/email/init','Home\UserController@sendInitEmail')->name('user_emain_init');
+//邮箱激活
+Route::get('/user/email/active/{email}/{token}','Home\UserController@emailSeting')->name('user_mail_set');
+//修改密码-通过原密码修改
+Route::get('/user/password/edit','Home\UserController@password')->name('user_password');
+Route::post('/user/password/edit','Home\UserController@passwordUpdata')->name('user_password');
+//忘记密码
+Route::get('/password/reset','Home\UserController@passwordReset')->name('user_password_reset');
+Route::post('/password/reset','Home\UserController@resetPassWord')->name('user_password_reset');
+Route::get('/password/reset/{user}/{token}','Home\UserController@passwordReseting')->name('user_password_reseting');
+Route::post('/password/reseting','Home\UserController@reset')->name('user_password_reseting');
+
+Route::get('/text','Home\UserController@text');
+
+
+
 
 

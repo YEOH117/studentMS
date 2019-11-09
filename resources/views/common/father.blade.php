@@ -27,21 +27,41 @@
         <ul class="x-navigation">
             <li class="xn-logo">
                 <a href="/">北部湾大学</a>
-                <a href="#" class="x-navigation-control"></a>
             </li>
             <li class="xn-profile">
                 <a href="#" class="profile-mini">
                     <!--小头像 -->
-                    <img src="#" alt="小头像"/>
+                    <img src="{{ Auth::user()->avatar }}" width="36px" height="36px" alt="小头像"/>
                 </a>
                 <div class="profile">
                     <div class="profile-image">
                         <!--大头像 -->
-                        <img src="#" alt="大头像"/>
+                        <a href="{{ route('user_me') }}">
+                            <img src="{{ Auth::user()->avatar }}" height="100px" width="100px" alt="大头像"/>
+                        </a>
+
                     </div>
                     <div class="profile-data">
-                        <div class="profile-data-name">用户名</div>
-                        <div class="profile-data-title">身份</div>
+                        <div class="profile-data-name">{{ Auth::user()->name }}</div>
+                        <div class="profile-data-title">
+                            @switch(Auth::user()->grade)
+                                @case(1)
+                                    学生
+                                    @break
+                                @case(2)
+                                    宿舍管理员
+                                    @break
+                                @case(3)
+                                    宿舍楼管理员
+                                    @break
+                                @case(4)
+                                    区域管理员
+                                    @break
+                                @case(5)
+                                    顶级管理员
+                                    @break
+                            @endswitch
+                        </div>
                     </div>
                 </div>
             </li>

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="body-full-height">
-    <head>        
-        
-        <title>Joli Admin - Responsive Bootstrap Admin Template</title>            
+    <head>
+
+        <title>北部湾大学-学生宿舍管理系统</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
-        <link rel="icon" href="favicon.ico" type="image/x-icon" />
+
         
         
               
@@ -62,7 +61,7 @@
                         &copy; 2019 叶斌龙
                     </div>
                     <div class="pull-right">
-                        <a href="#">忘记密码？点这</a>
+                        <a href="{{ route('user_password_reset') }}">忘记密码？点这</a>
                     </div>
                 </div>
                 @if (count($errors) > 0)

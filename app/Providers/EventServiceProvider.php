@@ -28,6 +28,15 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\NotificationToAdmins' => [
             'App\Listeners\NotificationToAdminsListener',
         ],
+        'App\Events\SendEmailVerifyCode' => [
+            'App\Listeners\SendEmailVerifyCodeListener',
+        ],
+        'App\Events\SendEmailActive' => [
+            'App\Listeners\SendEmailActiveListener',
+        ],
+        'App\Events\RestPassWordEmail' => [
+            'App\Listeners\RestPassWordEmailListener',
+        ],
     ];
 
     /**

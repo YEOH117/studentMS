@@ -9,6 +9,8 @@ use App\Models\Dormitory;
 use App\Models\Dormitory_member;
 use App\Models\Movestudent;
 use App\Models\Student;
+use App\Notifications\SendMailToStudent;
+use App\Notifications\SendNotificationMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -20,35 +22,6 @@ class AdjustApplicationController extends Controller
     public function index(){
         //授权,只有学生才能访问
         $this->authorize('adjustApplication',Dormitory_member::class);
-//        //查询用户住宿信息
-//        $info = Student::where('the_student_id',\Auth::user()->account)->first();
-//        if(empty($info)){
-//            //查不到用户信息
-//            session()->flash('danger','发生未知错误，你无法进入该页面！');
-//            return redirect('/');
-//        }
-//        //查询宿舍id
-//        $domitoryId = Dormitory_member::where('student_id',$info->id)->first();
-//        if(empty($domitoryId)){
-//            //用户未安排住宿
-//            session()->flash('danger','你尚未被安排住宿，请等待宿舍管理员安排后再访问此功能！');
-//            return redirect('/');
-//        }
-//        //查询宿舍信息
-//        $dormitory = Dormitory::where('id',$domitoryId->dormitory_id)->first();
-//        if(empty($dormitory)){
-//            //宿舍信息不存在
-//            session()->flash('danger','发生未知错误！');
-//            return redirect('/');
-//        }
-//        //查询宿舍楼信息
-//        $building = Building::where('id',$dormitory->building_id)->first();
-//        if(empty($building)){
-//            //宿舍楼信息不存在
-//            session()->flash('danger','发生未知错误！');
-//            return redirect('/');
-//        }
-//        return view('AdjustApplication.index',compact('info','dormitory','building'));
         return view('AdjustApplication.index');
     }
 
@@ -74,6 +47,16 @@ class AdjustApplicationController extends Controller
             .url('/').'/application/'.$user->id.'/'.$token.'</a>';
         //触发 发送通知给学生 事件
         event(new NotificationToStudents($targetId,$title,$content));
+
+        if($targetId->email != '未绑定邮箱'){
+            //拼接邮件信息
+            $content = $targetId->name.'同学！这里是北部湾大学宿舍管理系统通知：'.$user->name.'向你发起互相调换宿舍请求！你可以点击下面按钮或者链接进行同意或拒绝操作。';
+            $url = route('adjust_answer',[$user->id,$token]);
+            $title = '宿舍调换请求通知';
+            //使用队列发送邮件
+            $targetId->notify(new SendNotificationMail($title,$content,$url));
+        }
+
         //添加调宿记录
         $moveStudent = Movestudent::create([
             'target_id' => $targetId->id,
@@ -242,6 +225,7 @@ class AdjustApplicationController extends Controller
             $title = '你的调宿申请有进展了';
             $info = Auth::user()->name.'同意了你的调宿申请，等待宿舍管理员审核。';
             event(new NotificationToStudents($user,$title,$info));
+
         }else{
             $title = '你的调宿申请结果';
             $info = Auth::user()->name.'拒绝了你的调宿申请，调宿失败。';
@@ -255,6 +239,11 @@ class AdjustApplicationController extends Controller
             event(new NotificationToStudents($user,$title,$info));
             //删除申请记录
             $movestudent->delete();
+        }
+        //如果用户绑定邮箱了，那就给他发邮件
+        if($user->email != '未绑定邮箱'){
+            //发送结果邮件给申请者
+            $user->notify(new SendMailToStudent($title,$info));
         }
         //返回
         session()->flash('success','操作成功！');
@@ -485,6 +474,16 @@ class AdjustApplicationController extends Controller
             //删除调宿申请记录
             $movestudent->delete();
         }
+        //如果用户绑定邮箱了，那就给他发邮件
+        if($user->email != '未绑定邮箱'){
+            //发送结果邮件给申请者
+            $user->notify(new SendMailToStudent($title,$content));
+        }
+        //如果用户绑定邮箱了，那就给他发邮件
+        if($target->email != '未绑定邮箱'){
+            //发送结果邮件给申请者
+            $target->notify(new SendMailToStudent($title,$content2));
+        }
         session()->flash('success','操作成功！');
         return redirect(route('adjust_list'));
     }
@@ -646,4 +645,6 @@ class AdjustApplicationController extends Controller
         session()->flash('success','安排住宿成功！');
         return redirect()->back();
     }
+
+
 }
