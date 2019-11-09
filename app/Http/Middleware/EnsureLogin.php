@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class EnsureLogin
 {
@@ -15,13 +16,18 @@ class EnsureLogin
      */
     public function handle($request, Closure $next)
     {
+
+
+        $response = $next($request);
         // 1. 如果用户未登录
-        // 2. 并且访问的不是 login
-        if (!$request->user()  && !$request->is('login')) {
-            // 根据客户端返回对应的内容
-            return  redirect()->route('login');
+        // 2. 并且访问的不是 登陆跟重置密码、验证码图片
+        if (!$request->user()  && !$request->is('login','captcha/*','password/*')) {
+            return redirect()->route('login');
         }
-        return $next($request);
+
+
+        return $response;
+
     }
 
 }
