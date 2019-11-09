@@ -159,7 +159,9 @@ Route::post('/password/reset','Home\UserController@resetPassWord')->name('user_p
 Route::get('/password/reset/{user}/{token}','Home\UserController@passwordReseting')->name('user_password_reseting');
 Route::post('/password/reseting','Home\UserController@reset')->name('user_password_reseting');
 
-Route::get('/text','Home\UserController@text');
+//注销
+Route::get('/logout','Home\SessionController@logout')->name('logout');
+
 
 
 

@@ -30,4 +30,10 @@ class SessionController extends Controller
             return redirect()->back();
         }
     }
+
+    //注销
+    public function logout(){
+        Auth::logout();
+        return redirect('/login');
+    }
 }

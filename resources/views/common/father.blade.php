@@ -175,8 +175,17 @@
 
             <!-- 注销按钮 -->
             <li class="xn-icon-button pull-right">
-                <a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>
+                <a class="mb-control" data-box="#mb-signout" onclick="logout()"><span class="fa fa-sign-out"></span></a>
             </li>
+            <script>
+                function logout() {
+                    var r=confirm("确定退出登陆？继续请按确定键，返回按取消。")
+                    if (r==true)
+                    {
+                        window.location.href="{{ route('logout') }}";
+                    }
+                }
+            </script>
             <!-- 注销按钮END -->
             <!-- 消息按钮 -->
             <li class="xn-icon-button pull-right">
