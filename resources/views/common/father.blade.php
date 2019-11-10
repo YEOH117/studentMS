@@ -17,9 +17,9 @@
     @show
     <!-- EOF CSS INCLUDE -->
 </head>
-<body>
+<body style="background-image: url('img/bgimg.png')">
 <!-- START PAGE CONTAINER -->
-<div class="page-container">
+<div class="page-container @section('container')@show">
 
     <!-- START PAGE SIDEBAR -->
     <div class="page-sidebar">
@@ -225,10 +225,10 @@
         @show
 
         <!-- END 路径导航 -->
+            @section('body')
 
-        @section('body')
+            @show
 
-        @show
         @if (count($errors) > 0)
             <div class="alert alert-danger" style="text-align: center;">
                 <ul>
