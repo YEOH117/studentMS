@@ -97,7 +97,7 @@
                             style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 25px 0; text-align: center;">
                             <a target="_blank" href="http://localhost"
                                style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #bbbfc3; font-size: 19px; font-weight: bold; text-decoration: none; text-shadow: 0 1px 0 white;">
-                                {{ env('app.name') }} </a></td>
+                                北部湾大学宿舍管理系统 </a></td>
                     </tr>
                     <!-- Email Body -->
                     <tr>
@@ -148,7 +148,7 @@
                                         <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
                                             {{ $content2 }}</p>
                                         <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">
-                                            {{ env('app.name') }}</p>
+                                            北部湾大学宿舍管理系统</p>
                                         <table class="subcopy" width="100%" cellpadding="0" cellspacing="0"
                                                style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-top: 1px solid #EDEFF2; margin-top: 25px; padding-top: 25px;">
 
@@ -168,7 +168,7 @@
                                     <td class="content-cell" align="center"
                                         style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; padding: 35px;">
                                         <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; line-height: 1..5em; margin-top: 0; color: #AEAEAE; font-size: 12px; text-align: center;">
-                                            &copy; {{ date('Y') }} {{ env('app.name') }}. All rights reserved.</p></td>
+                                            &copy; {{ date('Y') }} 北部湾大学宿舍管理系统. All rights reserved.</p></td>
                                 </tr>
                                 </tbody>
                             </table>

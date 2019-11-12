@@ -39,7 +39,7 @@ class SendEmailVerifyCodeListener implements ShouldQueue
         $content2 = '如果您未请求更换密保邮箱，则无需采取进一步措施.';
         //发送邮件
         Mail::send('emails.text',compact('content1','content2','code'),function($message) use ($user){
-            $message->from('2793837438@qq.com','北部湾大学宿舍管理小助手')->to($user->email)->subject('北部湾大学宿舍管理系统通知');
+            $message->from('18965720201@163.com','北部湾大学宿舍管理小助手')->to($user->email)->subject('北部湾大学宿舍管理系统通知');
         });
     }
 }
