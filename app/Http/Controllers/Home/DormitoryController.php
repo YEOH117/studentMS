@@ -318,7 +318,7 @@ class DormitoryController extends Controller
             }
         }
         session()->flash('success', '提交智能排宿成功，系统将在后台自动智能排宿，请根据安排人数等待3~10分钟！');
-        return redirect('/');
+        return redirect()->back();
 
     }
 

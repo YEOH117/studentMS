@@ -17,7 +17,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default" style="height: 720px">
+                <div class="panel panel-default" style="height: 780px">
                     <div class="panel-heading">
                         <h3 class="panel-title"><strong>宿舍楼</strong></h3>
                     </div>
