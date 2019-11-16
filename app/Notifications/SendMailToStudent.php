@@ -44,7 +44,7 @@ class SendMailToStudent extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->subject($this->title)
-                    ->from('2793837438@qq.com', '北部湾大学小助手')
+                    ->from('18965720201@163.com', '北部湾大学小助手')
                     ->line($this->content);
     }
 

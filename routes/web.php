@@ -162,6 +162,10 @@ Route::post('/password/reseting','Home\UserController@reset')->name('user_passwo
 //注销
 Route::get('/logout','Home\SessionController@logout')->name('logout');
 
+//管理员发送通知
+Route::get('/send/notification','Home\SendNoticeController@index')->name('send_notice');
+Route::post('/send/notification','Home\SendNoticeController@store')->name('send_notice');
+
 
 
 

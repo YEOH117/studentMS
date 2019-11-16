@@ -16,4 +16,8 @@ class NotificationPolicy
 
         return $user->id == $notification->notifiable_id;
     }
+
+    public function send(User $user){
+        return $user->grade >= 2;
+    }
 }

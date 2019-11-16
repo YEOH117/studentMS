@@ -37,6 +37,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\RestPassWordEmail' => [
             'App\Listeners\RestPassWordEmailListener',
         ],
+        'App\Events\SendNotice' => [
+            'App\Listeners\SendNoticeListener',
+        ],
     ];
 
     /**

@@ -38,7 +38,7 @@ class RestPassWordEmailListener
         $url = route('user_password_reseting',[$user->id,$token]);
         //发送邮件
         Mail::send('emails.button',compact('content1','content2','button','url'),function($message) use ($user){
-            $message->from('2793837438@qq.com','北部湾大学宿舍管理小助手')->to($user->email)->subject('北部湾大学宿舍管理系统通知');
+            $message->from('18965720201@163.com','北部湾大学宿舍管理小助手')->to($user->email)->subject('北部湾大学宿舍管理系统通知');
         });
         //将token存入user表中
         $user->remember_token = $token;

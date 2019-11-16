@@ -154,6 +154,9 @@
             </li>
                 @endif
             @endif
+                <li class="">
+                    <a href="{{ route('send_notice') }}"><span class="fa fa-comment-o"></span> <span class="xn-text">发送通知</span></a>
+                </li>
                 @endif
         </ul>
         <!-- END X-NAVIGATION -->

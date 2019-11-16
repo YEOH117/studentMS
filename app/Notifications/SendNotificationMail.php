@@ -46,7 +46,7 @@ class SendNotificationMail extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                     ->subject($this->title)
-                    ->from('2793837438@qq.com', '北部湾大学小助手')
+                    ->from('18965720201@163.com', '北部湾大学小助手')
                     ->line($this->content1)
                     ->action('点击处理', $this->url)
                     ->line('此邮件为系统自动发送，请勿回复！');
